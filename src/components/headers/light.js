@@ -10,6 +10,11 @@ import logo from "../../images/logo.svg"
 import { ReactComponent as MenuIcon } from "feather-icons/dist/icons/menu.svg"
 import { ReactComponent as CloseIcon } from "feather-icons/dist/icons/x.svg"
 
+import { LoginButton } from "components/LoginButton.js"
+import { LogoutButton } from "components/LogOutButton.js"
+import { Profile } from "components/Profile.js"
+import { useAuth0 } from "@auth0/auth0-react"
+
 const Header = tw.header`
   flex justify-between items-center
   max-w-screen-xl mx-auto
@@ -76,21 +81,32 @@ const HeaderLight = ({
    * changing the defaultLinks variable below below.
    * If you manipulate links here, all the styling on the links is already done for you. If you pass links yourself though, you are responsible for styling the links or use the helper styled components that are defined here (NavLink)
    */
+
+  const { isAuthenticated, loginWithRedirect, logout} = useAuth0()
+
   const defaultLinks = [
     <NavLinks key={1}>
       <NavLink href="/#">Acerca</NavLink>
       <NavLink href="/blogs">Blog</NavLink>
       <NavLink href="/#">Productos</NavLink>
       <NavLink href="/#">Contacto</NavLink>
-      <NavLink href="/login" tw="lg:ml-12!">
-        Iniciar sesión
-      </NavLink>
-      <PrimaryLink
-        css={roundedHeaderButton && tw`rounded-full`}
-        href="/register"
-      >
+      { isAuthenticated ? (
+        <>
+          {/*<Profile />*/}
+          {/*<LogoutButton />*/}
+          {/*<NavLink href="/#" onClick={ () => logout({returnTo: window.location.origin }) }>LogOut</NavLink>*/}
+          <PrimaryLink css={roundedHeaderButton && tw`rounded-full`} href="/#" onClick={ () => logout({returnTo: window.location.origin }) }> Cerrar sesión </PrimaryLink>
+        </>
+      ) : (
+        <>
+          {/*<NavLink href="/#" onClick={() => loginWithRedirect()}>Login</NavLink>*/}
+          <PrimaryLink css={roundedHeaderButton && tw`rounded-full`} href="/#" onClick={() => loginWithRedirect()}> Iniciar sesión </PrimaryLink>
+        </>
+      )}
+      {/*<NavLink href="/login" tw="lg:ml-12!">Iniciar sesión</NavLink>
+      <PrimaryLink css={roundedHeaderButton && tw`rounded-full`} href="/register" >
         Regístrate
-      </PrimaryLink>
+      </PrimaryLink>*/}
     </NavLinks>,
   ]
 
