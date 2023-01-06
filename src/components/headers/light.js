@@ -90,6 +90,7 @@ const HeaderLight = ({
       <NavLink href="/blogs">Blog</NavLink>
       <NavLink href="/#">Productos</NavLink>
       <NavLink href="/#">Contacto</NavLink>
+      <NavLink href="/prueba">Prueba</NavLink>
       { isAuthenticated ? (
         <>
           {/*<Profile />*/}

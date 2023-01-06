@@ -9,6 +9,7 @@ import LoginPage from "pages/Login"
 import SignupPage from "pages/Signup"
 import BlogIndexPage from "pages/BlogIndex"
 import LandingPage from "pages/LandingPage"
+import Prueba from "pages/Prueba"
 
 const App = () => {
   return (
@@ -20,6 +21,7 @@ const App = () => {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<SignupPage />} />
           <Route path="/blogs" element={<BlogIndexPage />} />
+          <Route path="/prueba" element={<Prueba />} />
         </Routes>
       </Router>
     </>
