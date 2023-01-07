@@ -16,7 +16,7 @@ import celebrationIconImageSrc from "images/celebration-icon.svg"
 import shopIconImageSrc from "images/shop-icon.svg"
 import { Profile } from "components/Profile"
 
-const LandingPage = () => {
+const Prueba0 = () => {
   const Subheading = tw.span`tracking-wider text-sm font-medium`
   const HighlightedText = tw.span`bg-primary-500 text-gray-100 px-4 transform -skew-x-12 inline-block`
   const HighlightedTextInverse = tw.span`bg-gray-100 text-primary-500 px-4 transform -skew-x-12 inline-block`
@@ -24,7 +24,11 @@ const LandingPage = () => {
   const imageCss = tw`rounded-4xl`
   return (
     <AnimationRevealPage>
+
+      
       <Profile />
+
+
       <Hero
         heading={
           <>
@@ -39,6 +43,8 @@ const LandingPage = () => {
         primaryButtonText="Order Now"
         watchVideoButtonText="Meet The Chefs"
       />
+
+
       <MainFeature
         subheading={<Subheading>Established Since 2014</Subheading>}
         heading={
@@ -67,6 +73,8 @@ const LandingPage = () => {
         imageDecoratorBlob={true}
         imageDecoratorBlobCss={tw`left-1/2 -translate-x-1/2 md:w-32 md:h-32 opacity-25`}
       />
+
+
       {/* TabGrid Component also accepts a tabs prop to customize the tabs and its content directly. Please open the TabGrid component file to see the structure of the tabs props.*/}
       <TabGrid
         heading={
@@ -75,6 +83,8 @@ const LandingPage = () => {
           </>
         }
       />
+
+
       <Features
         heading={
           <>
@@ -104,6 +114,8 @@ const LandingPage = () => {
         imageContainerCss={tw`p-2!`}
         imageCss={tw`w-20! h-20!`}
       />
+
+
       <MainFeature2
         subheading={<Subheading>A Reputed Brand</Subheading>}
         heading={
@@ -135,6 +147,8 @@ const LandingPage = () => {
         imageDecoratorBlobCss={tw`left-1/2 md:w-32 md:h-32 -translate-x-1/2 opacity-25`}
         textOnLeft={true}
       />
+
+
       <Testimonial
         subheading=""
         heading={
@@ -143,6 +157,8 @@ const LandingPage = () => {
           </>
         }
       />
+
+
       <DownloadApp
         text={
           <>
@@ -151,9 +167,13 @@ const LandingPage = () => {
           </>
         }
       />
+
+
       <Footer />
+
+
     </AnimationRevealPage>
   )
 }
 
-export default LandingPage
+export default Prueba0
