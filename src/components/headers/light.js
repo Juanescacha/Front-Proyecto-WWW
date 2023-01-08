@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import tw from "twin.macro"
 import styled from "styled-components"
@@ -14,6 +14,7 @@ import { LoginButton } from "components/LoginButton.js"
 import { LogoutButton } from "components/LogOutButton.js"
 import { Profile } from "components/Profile.js"
 import { useAuth0 } from "@auth0/auth0-react"
+import { useNavigate } from "react-router-dom"
 
 const Header = tw.header`
   flex justify-between items-center
@@ -60,7 +61,6 @@ export const MobileNavLinks = motion(styled.div`
 export const DesktopNavLinks = tw.nav`
   hidden lg:flex flex-1 justify-between items-center
 `
-
 const HeaderLight = ({
   roundedHeaderButton = false,
   logoLink,
@@ -82,17 +82,80 @@ const HeaderLight = ({
    * If you manipulate links here, all the styling on the links is already done for you. If you pass links yourself though, you are responsible for styling the links or use the helper styled components that are defined here (NavLink)
    */
 
-  const { isAuthenticated, loginWithRedirect, logout} = useAuth0()
+  const {user, isAuthenticated, loginWithRedirect, logout} = useAuth0()
+
+  const [rol, setRol] = useState('vacio');
+  const [datosUser,setUser] = useState('vacio')
+
+  const navigate = useNavigate()
+
+  const obtenerRol = () => {
+    if(isAuthenticated){
+      try {
+        const results = fetch('https://api-www-5c6w.onrender.com/api/users/' + user.email + '/');
+      results
+        .then(response => response.json())
+        .then(data => {
+          setRol(data.role)
+          setUser(data)
+          console.log('Data: ', data)
+          console.log('Role useState: ', rol)
+          console.log('data.role: ', data.role)
+
+          verificarRol()
+        })
+      } catch (error) {
+        console.log(error)
+      }
+        
+    }
+  }
+
+  const verificarRol = () => {
+
+    if (isAuthenticated) {
+      //obtenerRol()
+
+      console.log("Autenticado: ", isAuthenticated)
+      console.log('Rol: ', rol)
+      console.log('DatosUser: ', datosUser)
+      //console.log('DatusUser Lenght: ', Object.keys(datosUser).length)
+
+      if(datosUser === null || datosUser === undefined || datosUser.detail === 'Not found.'){
+        //console.log('null o undefined O \'Not found\'')
+        //console.log('De Auth0: ', user)
+        navigate('/signup')
+      }
+      //if(datosUser===null){
+      /*
+      if(datosUser.detail === 'Not found.'){
+        navigate('/signup')
+      }
+      */
+    }
+}
+
+  //useEffect( verificarRol )
+  useEffect( obtenerRol )
 
   const defaultLinks = [
     <NavLinks key={1}>
-      <NavLink href="/#">Acerca</NavLink>
-      <NavLink href="/blogs">Blog</NavLink>
-      <NavLink href="/#">Productos</NavLink>
-      <NavLink href="/#">Contacto</NavLink>
       <NavLink href="/prueba">Prueba</NavLink>
-      <NavLink href="/prueba0">Prueba0</NavLink>
-      <Profile />
+      {/*<Profile />*/}
+
+      { rol === 'administrator' ? (
+        <>
+          <NavLink href="/dashadmin">DashBoard Adm</NavLink>
+          <NavLink href="/">Landing Page</NavLink>
+        </> ) : ( <></> )
+      }
+      { rol === 'assistant' ? (
+        <>
+          <NavLink href="/dashasis">DashBoard Asis</NavLink>
+          <NavLink href="/">Landing Page</NavLink>
+        </> ) : ( <></> )
+      }
+
       { isAuthenticated ? (
         <>
           {/*<Profile />*/}

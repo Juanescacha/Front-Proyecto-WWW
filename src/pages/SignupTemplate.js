@@ -109,7 +109,7 @@ const Signup = ({
                 <Input type="password" placeholder="Password" />
                 <SubmitButton type="submit">
                   <SubmitButtonIcon className="icon" />
-                  <span className="text">{submitButtonText}</span>
+                  <span className="text">rrr{submitButtonText}</span>
                 </SubmitButton>
                 <p tw="mt-6 text-xs text-gray-600 text-center">
                   Al registrarte, aceptas los{" "}

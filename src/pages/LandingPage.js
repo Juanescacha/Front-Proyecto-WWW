@@ -14,7 +14,6 @@ import Footer from "components/footers/FiveColumnWithInputForm.js"
 import chefIconImageSrc from "images/chef-icon.svg"
 import celebrationIconImageSrc from "images/celebration-icon.svg"
 import shopIconImageSrc from "images/shop-icon.svg"
-import { Profile } from "components/Profile"
 
 const LandingPage = () => {
   const Subheading = tw.span`tracking-wider text-sm font-medium`
@@ -24,7 +23,6 @@ const LandingPage = () => {
   const imageCss = tw`rounded-4xl`
   return (
     <AnimationRevealPage>
-      <Profile />
       <Hero
         heading={
           <>

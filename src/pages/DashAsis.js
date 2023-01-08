@@ -19,7 +19,7 @@ import { Spinner } from 'react-bootstrap'
 import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react"
 import HeaderLight from "components/headers/light"
 
-const DashAdmin = () => {
+const DashAsis = () => {
   const Subheading = tw.span`tracking-wider text-sm font-medium`
   const HighlightedText = tw.span`bg-primary-500 text-gray-100 px-4 transform -skew-x-12 inline-block`
   const HighlightedTextInverse = tw.span`bg-gray-100 text-primary-500 px-4 transform -skew-x-12 inline-block`
@@ -31,13 +31,13 @@ const DashAdmin = () => {
   return (
     <AnimationRevealPage>
       <HeaderLight />
-      <h1>Página para el DashBoard del administrador</h1>
+      <h1>Página para el DashBoard del Asistente</h1>
     </AnimationRevealPage>
   )
 }
 
-//export default DashAdmin
+//export default DashAsis
 
-export default withAuthenticationRequired(DashAdmin, {
+export default withAuthenticationRequired(DashAsis, {
   onRedirecting: () => <Spinner animation="border" />,
 });

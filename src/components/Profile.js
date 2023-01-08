@@ -1,7 +1,8 @@
 import React from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 
-export const Profile = () => {
+//export const Profile = () => {
+const Profile = () => {
     const { user, isAuthenticated, isLoading } = useAuth0();
 
     if (isLoading){
@@ -19,3 +20,16 @@ export const Profile = () => {
         )
     )
 }
+
+const SacarEmail = () => {
+    const { user, isAuthenticated, isLoading } = useAuth0();
+
+    if (isLoading){
+        return "Loading..."
+    }
+
+    return user.email
+}
+
+//export default Profile
+export { Profile , SacarEmail}
