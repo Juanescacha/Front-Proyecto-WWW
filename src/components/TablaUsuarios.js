@@ -18,6 +18,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
 
 //const url=''
+const seleccionado = "selected"
 
 class TablaUsuarios extends Component{
   state={
@@ -280,6 +281,14 @@ class TablaUsuarios extends Component{
             <label htmlFor="is_active">Estado</label>
             <input className="form-control" type="text" name="is_active"id="is_active" /*readOnly*/ onChange={this.handleChange} value={form.is_active}/>
             <input className="form-control" type="checkbox" name="vehicle3" value="Boat" checked></input>
+            <select name="select">
+              <option value="administrator">Administrador</option>
+              <option value="none" selected disabled hidden>Selecciona una opción</option>
+              <option value="client">Cliente</option>
+              <option value="assistant" selected = {seleccionado}>Asistente</option>
+              {/* <option value="value2" selected>Value 2</option> */}
+              
+            </select>
           </div>
         </ModalBody>
 
