@@ -7,14 +7,22 @@ import { Spinner } from 'react-bootstrap'
 import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react"
 import { useNavigate } from "react-router-dom"
 import { Profile } from "../components/Profile"
+import DataTable from 'react-data-table-component'
+import 'bootstrap/dist/css/bootstrap.min.css'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faEdit, faTrashAlt } from "@fortawesome/free-solid-svg-icons"
+import {Moodal, ModalBody, ModalHeader, ModalFooter} from 'reactstrap'
 
-const Prueba = () => {
+import TablaUsuarios from "components/TablaUsuarios"
+
+const Usuarios = () => {
 
   const {user, isAuthenticated, loginWithRedirect, logout} = useAuth0()
 
   const navigate = useNavigate()
 
   const [rol, setRol] = useState('');
+  const [users, setUsers] = useState( [] );
 
   /*
   const getPersonas = async() => {
@@ -35,7 +43,7 @@ const Prueba = () => {
 */
 
 /*
-  const usuarios = () => {
+  const usuarios1 = () => {
     var respuesta
     axios   //Axios to send and receive HTTP requests
       .get("https://api-www-5c6w.onrender.com/api/users/",{
@@ -52,12 +60,13 @@ const Prueba = () => {
   }
   */
 
-  const usuarios = () => {
+  const usuarios1 = () => {
     const results = fetch('https://api-www-5c6w.onrender.com/api/users/');
     results
       .then(response => response.json())
       .then(data => {
-        console.log(data)
+        console.log('Usuarios: ',data)
+        setUsers(data)
       })
   }
 
@@ -117,24 +126,65 @@ const Prueba = () => {
     
   }
 
-  useEffect(obtenerRol);
+  const datos = [
+    {
+      id: 1,
+      name: "Luis",
+      edad: 25
+    },
+    {
+      id: 2,
+      name: "Martina",
+      edad: 29
+    },
+    {
+      id: 3,
+      name: "Canelaria",
+      edad: 36
+    }
+  ]
+  const columnas = [
+    {
+      name: 'NOMBRE',
+      selector: row => row.name
+    },
+    {
+      name: 'CORREO',
+      selector: row => row.email
+    }
+  ]
+
+  useEffect(() => {
+    usuarios1()
+  }, []);
 
   return (
     <AnimationRevealPage>
+      <div>DataTable React</div>
+      <DataTable 
+        columns={columnas}
+        data={users}
+        pagination
+      />
+      <p></p>
+      <div>Material React</div>
+      <TablaUsuarios />
+      {/* 
       <h1>Este texto solo es visible si usted está logueado</h1>
       <a href="/">Home</a>
       <a href="/landingpage">Landing</a>
       <a href="/signupe">SignUpE</a>
       <a href="/signupttt">SignUpTTT</a>
-      <button onClick={() => usuarios()}>Usuarios</button>
+      <button onClick={() => usuarios1()}>Usuarios</button>
       <button onClick={() => obtenerRol()}>Rol: {rol}</button>
       <button onClick={() => postUser()}>Post User</button>
       <p>Hola1</p>
       <Profile />
       <p>Hola2</p>
+      */}
     </AnimationRevealPage>
   )
 }
 
-//export default Prueba
-export default withAuthenticationRequired(Prueba, {onRedirecting: () => <Spinner animation="border" />, });
+export default Usuarios
+//export default withAuthenticationRequired(Usuarios, { onRedirecting: () => <Spinner animation="border" />, });
