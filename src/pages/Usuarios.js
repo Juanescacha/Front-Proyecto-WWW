@@ -14,6 +14,7 @@ import { faEdit, faTrashAlt } from "@fortawesome/free-solid-svg-icons"
 import {Moodal, ModalBody, ModalHeader, ModalFooter} from 'reactstrap'
 
 import TablaUsuarios from "components/TablaUsuarios"
+import HeaderLight from "components/headers/light"
 
 const Usuarios = () => {
 
@@ -160,14 +161,17 @@ const Usuarios = () => {
 
   return (
     <AnimationRevealPage>
+      <HeaderLight />
+      {/*
       <div>DataTable React</div>
       <DataTable 
         columns={columnas}
         data={users}
         pagination
       />
+      */}
       <p></p>
-      <div>Material React</div>
+      <div>Tabla Usuarios Editable</div>
       <TablaUsuarios />
       {/* 
       <h1>Este texto solo es visible si usted está logueado</h1>

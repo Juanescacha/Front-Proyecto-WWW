@@ -15,21 +15,23 @@ import { Component } from "react"
 import { render } from "@testing-library/react"
 import axios from "axios"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+//import '../styles/estilos.css'
 
 
 //const url=''
-const seleccionado = "selected"
 
 class TablaUsuarios extends Component{
   state={
     data:[],
     modalInsertar: false,
+    modalEditar: false,
+    modalBloquear: false,
     form:{
       name: '',
       email: '',
       password: 'vacio',
-      role: '',
-      is_active: true
+      role: null,
+      is_active: null
     }
   }
 
@@ -52,9 +54,128 @@ class TablaUsuarios extends Component{
     })
   }
 
+  peticionPut = async () => {
+    console.log('this.state.form: ', this.state.form)
+    await axios.put('https://api-www-5c6w.onrender.com/api/users/'+this.state.form.email+'/',this.state.form).then(response => {
+      this.modalEditar()
+      this.peticionGet()
+    }).catch(error => {
+      console.log(error.message)
+    })
+  }
+
+  peticionBloquear = async () => {
+
+    //console.log('this.state.form: ', this.state.form)
+    const estaActivo = this.state.form.is_active ? false : true
+    const body = {
+      name: this.state.form.name,
+      email: this.state.form.email,
+      password: this.state.form.password,
+      role: this.state.form.role,
+      is_active: estaActivo
+    }
+    //console.log('body: ', body)
+
+    await axios.put('https://api-www-5c6w.onrender.com/api/users/'+this.state.form.email+'/', body).then(response => {
+      this.setState({modalBloquear: false})
+      this.peticionGet()
+    }).catch(error => {
+      console.log('Error.message peticionBloquear: ', error.message)
+      console.log('Error peticionBloquear: ', error)
+    })
+  }
+
+  obtenerAccessToken = async () => {
+    try {
+      var respuesta = ""
+      var url = "https://proywww.us.auth0.com/oauth/token";
+
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", url);
+
+      xhr.setRequestHeader("content-type", "application/json");
+
+      xhr.responseType = 'json';
+
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+            console.log(xhr.status);
+            //console.log(xhr.responseText);
+            //console.log('Respuesta Text: ', xhr.responseText);
+            console.log('Respuesta xhr.response: ', xhr.response)
+            respuesta = xhr.response
+        }};
+
+      var data = '{"client_id":"9igEug9RqhLg5U0I4rvPJ2Q3J3syuLTi","client_secret":"7_7PK-V74RT2RS3C0_Q6KD2IK3k6bp1KEUAUXG6qE4VCDuJzr_nLuM-JwVc8bl83","audience":"https://proywww.us.auth0.com/api/v2/","grant_type":"client_credentials"}';
+      xhr.send(data);
+
+      return respuesta
+
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  registrarUsuario = async () => {
+    try {
+        //const { email, password } = req.body
+        const acceso = await this.obtenerAccessToken()
+        console.log('Acceso: ', acceso)
+        //uno
+        //const acceso = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ijl0X25HSXptUXhENjV2MDFMcXpWcCJ9.eyJpc3MiOiJodHRwczovL3Byb3l3d3cudXMuYXV0aDAuY29tLyIsInN1YiI6IjlpZ0V1ZzlScWhMZzVVMEk0cnZQSjJRM0ozc3l1TFRpQGNsaWVudHMiLCJhdWQiOiJodHRwczovL3Byb3l3d3cudXMuYXV0aDAuY29tL2FwaS92Mi8iLCJpYXQiOjE2NzM3OTU2MDAsImV4cCI6MTY3Mzg4MjAwMCwiYXpwIjoiOWlnRXVnOVJxaExnNVUwSTRydlBKMlEzSjNzeXVMVGkiLCJndHkiOiJjbGllbnQtY3JlZGVudGlhbHMifQ.beVIwSEs99ObkADqhMq3f4eaDf0gHTfW3fbr29dSYqF1C1mc6-7QVkx_BwAcCXPw8i4bwcNxtWn9cexruik0gnm7iPMYv4mZSjruO3ETzk4Lw_RaCdG4PJbg4ztCQ6sYUWyG5_-5676j6HgKmdwagXjAhcipZyKChIqydJddDmkQZYJ1SfNwUoFYOVsIWJw4fjJQSh7-VS3mJl8MUfoenLCgjKxQzJBS7XDFBu5CZLzul4eTkA5iNY5y7XQLRIYzbsth9XrwKgfbswOadq19dqbUfkoOeM3I42hAsAu0purkks7vCEewp9o4uevRSoTekTr4yac6dPgfeYvUphvMJg"
+        //const acceso = {"access_token":"eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ijl0X25HSXptUXhENjV2MDFMcXpWcCJ9.eyJpc3MiOiJodHRwczovL3Byb3l3d3cudXMuYXV0aDAuY29tLyIsInN1YiI6IjlpZ0V1ZzlScWhMZzVVMEk0cnZQSjJRM0ozc3l1TFRpQGNsaWVudHMiLCJhdWQiOiJodHRwczovL3Byb3l3d3cudXMuYXV0aDAuY29tL2FwaS92Mi8iLCJpYXQiOjE2NzM3OTU3NzYsImV4cCI6MTY3Mzg4MjE3NiwiYXpwIjoiOWlnRXVnOVJxaExnNVUwSTRydlBKMlEzSjNzeXVMVGkiLCJndHkiOiJjbGllbnQtY3JlZGVudGlhbHMifQ.RKL5GwYsqwIVR_tCYoKcVNzFPLE13hEVJHn5MGmHciw5QjGqrH2xCQWv-FaOb8V8qUw2I1b40smwOrW8WxSafxBM8S1p7Dr6zpP_NnQmAHnEg2tBrHbI-AIAm9KQMD5GopiZSTJnS7VARQceQ844eka_bJK9ZHi6F4_Sqjr-kL5TmD_8Xxa2RRyWcjQA1roB6iU52tkMUHHS6kfSTewUQPvt9R6pOMdA3dsqjadheVnXxNzIG3QAhD-LQOYHfs4VZa651FdqVdvs_0wcMC9pzt-SzizPAF_NlPKhYYnWFj9_MNX0rXyNKZYtb9KPGD25NiX0tHvyScApm04IhCOHqQ","expires_in":86400,"token_type":"Bearer"}
+        //dos
+        var options = {
+            method: 'POST',
+            url: 'https://proywww.us.auth0.com/api/v2/users',
+            headers: { 'content-type': 'application/json', authorization: `Bearer ${acceso}` },
+            data:
+            {
+                "connection": "Username-Password-Authentication",
+                "email": "probando1@email.com",
+                "password": "Auth0-2023--",
+            }
+        };
+        const response = await axios.request(options)
+        //res.json(response.data)
+        console.log(response.data)
+    }
+    catch (error) {
+        //next(error)
+        console.log('Error Registrar Usuario: ', error)
+        console.log('Error Registrar Usuario (mensaje): ', error.message)
+    }
+  }
+
+  registroPrueba = async () => {
+    await axios.post('https://proywww.us.auth0.com/api/v2/users/',
+      {
+        "email":"prueba111@gmailo.com"
+      }).then(response => {
+        console.log('response.data: ', response.data)
+      //this.modalInsertar()
+      //this.peticionGet()
+    }).catch(error => {
+      console.log(error.message)
+      console.log(error)
+      console.log("Error en registroPrueba")
+    })
+  }
+
 
   modalInsertar = () => {
     this.setState({modalInsertar: !this.state.modalInsertar})
+    this.setState({form: {
+      name: '',
+      email: '',
+      password: 'vacio',
+      role: null,
+      is_active: null
+    }})
+  }
+  modalEditar = () => {
+    this.setState({modalEditar: !this.state.modalEditar})
   }
   
   seleccionarUsuario = (usuario) => {
@@ -82,6 +203,18 @@ class TablaUsuarios extends Component{
 
   componentDidMount() {
     this.peticionGet()
+  }
+
+  devolverRol(rol){
+    if(rol==="administrator"){
+      return "Administrador"
+    }
+    if(rol==="client"){
+      return "Cliente"
+    }
+    if(rol==="assistant"){
+      return "Asistente"
+    }
   }
 
   /*
@@ -189,44 +322,13 @@ class TablaUsuarios extends Component{
     }
   }
   */
-/*
-  const datos = [
-    {
-      id: 1,
-      name: "Luis",
-      edad: 25
-    },
-    {
-      id: 2,
-      name: "Martina",
-      edad: 29
-    },
-    {
-      id: 3,
-      name: "Canelaria",
-      edad: 36
-    }
-  ]
-  */
-/*
-  const columnas = [
-    {
-      name: 'NOMBRE',
-      selector: row => row.name
-    },
-    {
-      name: 'CORREO',
-      selector: row => row.email
-    }
-  ]
-*/
-/*
-  useEffect(() => {
-    usuarios1()
-  }, []);
-*/
+
   render(){
     const {form}=this.state;
+    //this.obtenerAccessToken()
+    //this.registrarUsuario()
+    //this.registroPrueba()
+    
   return (
     <div className="TablaUsuarios">
       <br />
@@ -249,12 +351,13 @@ class TablaUsuarios extends Component{
                 <tr>
                   <td>{usuario.name}</td>
                   <td>{usuario.email}</td>
-                  <td>{usuario.role}</td>
-                  <td>{ usuario.is_active ? "Activo" : "Inactivo"}</td>
+                  {/*<td>{usuario.role}</td>*/}
+                  <td>{this.devolverRol( usuario.role )}</td>
+                  <td>{ usuario.is_active ? "Activo" : "Inactivo" }</td>
                   <td>
-                    <button className="btn btn-primary"><FontAwesomeIcon icon={faEdit}/></button>
+                    <button className="btn btn-primary" onClick={()=>{this.seleccionarUsuario(usuario); this.modalEditar()}}><FontAwesomeIcon icon={faEdit}/></button>
                     {"  "}
-                    <button className="btn btn-danger"><FontAwesomeIcon icon={faTrashAlt}/></button>
+                    <button className="btn btn-danger" onClick={()=>{this.seleccionarUsuario(usuario); this.setState({modalBloquear: true}) }}><FontAwesomeIcon icon={faTrashAlt}/></button>
                   </td>
                 </tr>
               )
@@ -263,6 +366,7 @@ class TablaUsuarios extends Component{
         </table>
       </div>
 
+      {/* Modal Insertar Usuario */}
       <Modal isOpen={this.state.modalInsertar}>
         <ModalHeader style={{display: 'block'}}>
           <span style={{float: 'right'}}>x</span>
@@ -275,19 +379,36 @@ class TablaUsuarios extends Component{
             <label htmlFor="email">Correo</label>
             <input className="form-control" type="text" name="email"id="email" onChange={this.handleChange} value={form.email}/>
             <br />
+            {/*}
             <label htmlFor="role">Rol</label>
-            <input className="form-control" type="text" name="role"id="role" /*readOnly*/ onChange={this.handleChange} value={form.role}/>
+            <input className="form-control" type="text" name="role"id="role"  onChange={this.handleChange} value={form.role}/>
             <br />
-            <label htmlFor="is_active">Estado</label>
-            <input className="form-control" type="text" name="is_active"id="is_active" /*readOnly*/ onChange={this.handleChange} value={form.is_active}/>
-            <input className="form-control" type="checkbox" name="vehicle3" value="Boat" checked></input>
-            <select name="select">
+            */}
+            <label htmlFor="role">Seleccionar rol:&nbsp;&nbsp;</label>
+
+            <select name="role" onChange={this.handleChange} value={form.role}>
+              <option value="none" selected>Selecciona una opción</option>
               <option value="administrator">Administrador</option>
-              <option value="none" selected disabled hidden>Selecciona una opción</option>
               <option value="client">Cliente</option>
-              <option value="assistant" selected = {seleccionado}>Asistente</option>
+              <option value="assistant">Asistente</option>
               {/* <option value="value2" selected>Value 2</option> */}
-              
+            </select>
+            <br />
+            {/*
+            <label htmlFor="is_active">Estado</label>
+            <input className="form-control" type="bool" name="is_active"id="is_active" onChange={this.handleChange} value={form.is_active}/>
+            */}
+            {/*
+            <label htmlFor="is_active">Seleccionar estado:&nbsp;&nbsp;</label>
+            <input type="checkbox" id="is_active" name="is_active" onChange={this.handleChange} value={ form.is_active }/>
+          */}
+            <label htmlFor="is_active">Seleccionar estado:&nbsp;&nbsp;</label>
+
+            <select name="is_active" onChange={this.handleChange} value={form.is_active}>
+              <option value="none" selected>Selecciona una opción</option>
+              <option value={true}>Activo</option>
+              <option value={false}>Inactivo</option>
+              {/* <option value="value2" selected>Value 2</option> */}
             </select>
           </div>
         </ModalBody>
@@ -299,6 +420,73 @@ class TablaUsuarios extends Component{
           <button className="brn btn-danger" onClick={() => this.modalInsertar()}>Cancelar</button>
         </ModalFooter>
       </Modal>
+
+      {/* Modal Editar Usuario */}
+      <Modal isOpen={this.state.modalEditar}>
+        <ModalHeader style={{display: 'block'}}>
+          <span style={{float: 'right'}}>x</span>
+        </ModalHeader>
+        <ModalBody>
+          <div className="form-group">
+            <label htmlFor="name">Nombre EDITANDO</label>
+            <input className="form-control" type="text" name="name"id="name" onChange={this.handleChange} value={form.name}/>
+            <br />
+            <label htmlFor="email">Correo</label>
+            <input className="form-control" type="text" name="email"id="email" readOnly onChange={this.handleChange} value={form.email}/>
+            <br />
+            {/*}
+            <label htmlFor="role">Rol</label>
+            <input className="form-control" type="text" name="role"id="role"  onChange={this.handleChange} value={form.role}/>
+            <br />
+            */}
+            <label htmlFor="role">Seleccionar rol:&nbsp;&nbsp;</label>
+
+            <select name="role" onChange={this.handleChange} value={form.role}>
+              <option value="none" selected>Selecciona una opción</option>
+              <option value="administrator">Administrador</option>
+              <option value="client">Cliente</option>
+              <option value="assistant">Asistente</option>
+              {/* <option value="value2" selected>Value 2</option> */}
+            </select>
+            <br />
+            {/*
+            <label htmlFor="is_active">Estado</label>
+            <input className="form-control" type="bool" name="is_active"id="is_active" onChange={this.handleChange} value={form.is_active}/>
+            */}
+            {/*
+            <label htmlFor="is_active">Seleccionar estado:&nbsp;&nbsp;</label>
+            <input type="checkbox" id="is_active" name="is_active" onChange={this.handleChange} value={ form.is_active }/>
+          */}
+            <label htmlFor="is_active">Seleccionar estado:&nbsp;&nbsp;</label>
+
+            <select name="is_active" onChange={this.handleChange} value={form.is_active}>
+              <option value="none" selected>Selecciona una opción</option>
+              <option value={true}>Activo</option>
+              <option value={false}>Inactivo</option>
+              {/* <option value="value2" selected>Value 2</option> */}
+            </select>
+          </div>
+        </ModalBody>
+
+        <ModalFooter>
+          <button className="btn btn-success" onClick={() => this.peticionPut()}>
+            Actualizar
+          </button>
+          <button className="brn btn-danger" onClick={() => this.modalEditar()}>Cancelar</button>
+        </ModalFooter>
+      </Modal>
+
+      {/* Modal Bloquear Usuario */}
+      <Modal isOpen={this.state.modalBloquear}>
+        <ModalBody>
+          ¿Estás seguro que deseas bloquear al usuario {form && form.name}?
+        </ModalBody>
+        <ModalFooter>
+          <button className="btn btn-danger" onClick={() => this.peticionBloquear()}>Sí</button>
+          <button className="btn btn-secundary" onClick={() => this.setState({modalBloquear: false}) }>No</button>
+        </ModalFooter>
+      </Modal>
+
       <div>Probando tabla usuarios</div>
     </div>
   )

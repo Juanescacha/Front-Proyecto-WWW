@@ -14,6 +14,7 @@ import Prueba0 from "pages/Prueba0"
 import DashAdmin from "pages/DashAdmin"
 import DashAsis from "pages/DashAsis"
 import Usuarios from "pages/Usuarios"
+import Reportes from "pages/Reportes"
 
 const App = () => {
   return (
@@ -31,6 +32,7 @@ const App = () => {
           <Route path="/dashadmin" element={<DashAdmin />} />
           <Route path="/dashasis" element={<DashAsis />} />
           <Route path="/usuarios" element={<Usuarios />} />
+          <Route path="/reportes" element={<Reportes />} />
         </Routes>
       </Router>
     </>
