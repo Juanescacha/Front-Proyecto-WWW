@@ -162,30 +162,9 @@ const Usuarios = () => {
   return (
     <AnimationRevealPage>
       <HeaderLight />
-      {/*
-      <div>DataTable React</div>
-      <DataTable 
-        columns={columnas}
-        data={users}
-        pagination
-      />
-      */}
       <p></p>
-      <div>Tabla Usuarios Editable</div>
+      <h2>Realice las operaciones con usuarios sobre la tabla</h2>
       <TablaUsuarios />
-      {/* 
-      <h1>Este texto solo es visible si usted está logueado</h1>
-      <a href="/">Home</a>
-      <a href="/landingpage">Landing</a>
-      <a href="/signupe">SignUpE</a>
-      <a href="/signupttt">SignUpTTT</a>
-      <button onClick={() => usuarios1()}>Usuarios</button>
-      <button onClick={() => obtenerRol()}>Rol: {rol}</button>
-      <button onClick={() => postUser()}>Post User</button>
-      <p>Hola1</p>
-      <Profile />
-      <p>Hola2</p>
-      */}
     </AnimationRevealPage>
   )
 }

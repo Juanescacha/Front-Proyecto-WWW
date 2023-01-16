@@ -15,7 +15,7 @@ import { Component } from "react"
 import { render } from "@testing-library/react"
 import axios from "axios"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-//import '../styles/estilos.css'
+import '../styles/estilos.css'
 
 
 //const url=''
@@ -335,7 +335,7 @@ class TablaUsuarios extends Component{
       <button className="btn btn-success" onClick={() => this.modalInsertar()}>Agregar usuario</button>
       <br/><br/>
       <div class="table-responsive">
-        <table className="table">
+        <table class="scrolldown">
           <thead>
             <tr>
               <th>Nombre</th>
@@ -486,8 +486,6 @@ class TablaUsuarios extends Component{
           <button className="btn btn-secundary" onClick={() => this.setState({modalBloquear: false}) }>No</button>
         </ModalFooter>
       </Modal>
-
-      <div>Probando tabla usuarios</div>
     </div>
   )
 }

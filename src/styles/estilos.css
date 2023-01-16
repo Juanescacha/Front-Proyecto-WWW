@@ -1,19 +1,23 @@
-body{
-
-    background-color: #eee; 
-}
-
-table th , table td{
-    text-align: center;
-}
-
-table tr:nth-child(even){
-    background-color: #BEF2F5
-}
-
-.pagination li:hover{
-    cursor: pointer;
-}
-		table tbody tr {
-			display: none;
-		}
+table.scrolldown {
+    border-spacing: 0;
+    border: 1px solid grey;
+    /* Comentario */
+ }
+     
+ table.scrolldown tbody, table.scrolldown thead {
+    display: block;
+ }   
+           
+ table.scrolldown tbody {
+    height: 400px;
+    overflow-y: scroll;
+    overflow-x: auto;
+ }
+     
+ tbody td, thead th {
+    width : 200px;
+    text-align:center;
+ }
+ td {
+    text-align:center;
+ }
