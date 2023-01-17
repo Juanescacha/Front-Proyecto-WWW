@@ -8,10 +8,6 @@ import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react"
 import { useNavigate } from "react-router-dom"
 import { Profile } from "../components/Profile"
 
-//import {auth0} from 'https://cdn.auth0.com/js/auth0/9.11/auth0.min.js'
-//import {auth0} from '../component/auth0.min.js'
-import { WebAuth } from "auth0-js"
-
 const Prueba = () => {
 
   const {user, isAuthenticated, loginWithRedirect, logout} = useAuth0()
@@ -19,31 +15,6 @@ const Prueba = () => {
   const navigate = useNavigate()
 
   const [rol, setRol] = useState('');
-
-  var webAuth = new WebAuth({
-    domain:       'proywww.us.auth0.com',
-    //domain:       'proywww.us.auth0.com/dbconnections/signup',
-    //domain:       'proywww.us.auth0.com/dbconnections/signup/',
-    clientID:     '9igEug9RqhLg5U0I4rvPJ2Q3J3syuLTi'
-  });
-  
-  const respuesta = webAuth.signup({ 
-    connection: 'Username-Password-Authentication', 
-    email: 'enero16@correo.com', 
-    password: 'Auth0-2023',
-    username: "johndoe",
-    given_name: "John",
-    family_name: "Doe",
-    name: "John Doe",
-    nickname: "johnny",
-    picture: "http://example.org/jdoe.png",
-    user_metadata: { plan: 'silver', team_id: 'a111' }
-  }, function (err) { 
-    if (err) return alert('Something went wrong: ' + err.message);
-      return alert('success signup without login!') 
-  });
-
-  console.log('Respuesta Auth0: ', respuesta)
 
   /*
   const getPersonas = async() => {
