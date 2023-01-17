@@ -143,11 +143,16 @@ const HeaderLight = ({
   const defaultLinks = [
     <NavLinks key={1}>
       {/*<Profile />*/}
-      <NavLink href="/productos">Productos</NavLink>
-      <NavLink href="/blogs">Blogs</NavLink>
-
+      <NavLink href="/blogs">Blogs</NavLink>      
+      { rol === 'client' ? (
+        <>
+          <NavLink href="/productos">Productos</NavLink>
+          <NavLink href="/">Landing Page</NavLink>
+        </> ) : ( <></> )
+      }
       { rol === 'administrator' ? (
         <>
+          <NavLink href="/productos">Productos</NavLink>
           <NavLink href="/usuarios">Usuarios</NavLink>
           <NavLink href="/reportes">Reportes</NavLink>
           <NavLink href="/">Landing Page</NavLink>
@@ -155,6 +160,7 @@ const HeaderLight = ({
       }
       { rol === 'assistant' ? (
         <>
+          <NavLink href="/productos">Productos</NavLink>
           <NavLink href="/reportes">Reportes</NavLink>
           <NavLink href="/">Landing Page</NavLink>
         </> ) : ( <></> )
