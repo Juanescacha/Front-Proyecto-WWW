@@ -15,6 +15,8 @@ import { LogoutButton } from "components/LogOutButton.js"
 import { Profile } from "components/Profile.js"
 import { useAuth0 } from "@auth0/auth0-react"
 import { useNavigate } from "react-router-dom"
+import Usuarios from "pages/Usuarios.js"
+import Reportes from "pages/Reportes.js"
 
 const Header = tw.header`
   flex justify-between items-center
@@ -140,18 +142,20 @@ const HeaderLight = ({
 
   const defaultLinks = [
     <NavLinks key={1}>
-      <NavLink href="/prueba">Prueba</NavLink>
       {/*<Profile />*/}
+      <NavLink href="/productos">Productos</NavLink>
+      <NavLink href="/blogs">Blogs</NavLink>
 
       { rol === 'administrator' ? (
         <>
-          <NavLink href="/dashadmin">DashBoard Adm</NavLink>
+          <NavLink href="/usuarios">Usuarios</NavLink>
+          <NavLink href="/reportes">Reportes</NavLink>
           <NavLink href="/">Landing Page</NavLink>
         </> ) : ( <></> )
       }
       { rol === 'assistant' ? (
         <>
-          <NavLink href="/dashasis">DashBoard Asis</NavLink>
+          <NavLink href="/reportes">Reportes</NavLink>
           <NavLink href="/">Landing Page</NavLink>
         </> ) : ( <></> )
       }

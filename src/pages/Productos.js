@@ -16,7 +16,7 @@ import {Moodal, ModalBody, ModalHeader, ModalFooter} from 'reactstrap'
 import TablaUsuarios from "components/TablaUsuarios"
 import HeaderLight from "components/headers/light"
 
-const Usuarios = () => {
+const Productos = () => {
 
   const {user, isAuthenticated, loginWithRedirect, logout} = useAuth0()
 
@@ -116,12 +116,10 @@ const Usuarios = () => {
   return (
     <AnimationRevealPage>
       <HeaderLight />
-      <p></p>
-      <h2>Realice las operaciones con usuarios sobre la tabla</h2>
-      <TablaUsuarios />
+      <p style="font-size: x-large">En este espacio va el contenido de 'Productos'</p>
     </AnimationRevealPage>
   )
 }
 
-export default Usuarios
-//export default withAuthenticationRequired(Usuarios, { onRedirecting: () => <Spinner animation="border" />, });
+export default Productos
+//export default withAuthenticationRequired(Productos, { onRedirecting: () => <Spinner animation="border" />, });

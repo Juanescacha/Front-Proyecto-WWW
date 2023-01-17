@@ -13,6 +13,10 @@ import { PieController } from 'chart.js';
 import React, { useState } from 'react';
 import { useEffect } from 'react';
 
+import AnimationRevealPage from "helpers/AnimationRevealPage.js"
+import 'bootstrap/dist/css/bootstrap.min.css'
+import HeaderLight from "components/headers/light"
+
 function Reportes() {
 
     // INICIO: Probando actualización de datos en Chart
@@ -143,35 +147,39 @@ function Reportes() {
 
     //setPrueba( Pie1(scores,labels,nomGrafico) )    
 
-    return (<div>
-                <div style={{width: ancho, height: alto}}>
-                    <LineChart/>
+    return (
+            <AnimationRevealPage>
+                <HeaderLight />
+                <div>
+                    <div style={{width: ancho, height: alto}}>
+                        <LineChart/>
+                    </div>
+                    <div style={{width: ancho, height: alto}}>
+                        <BarChart/>
+                    </div>
+                    <div style={{width: ancho, height: alto}}>
+                        <SegmentChart/>
+                    </div>
+                    <div style={{width: ancho, height: alto}}>
+                        <SegmentChartGrandient/>
+                    </div>
+                    <div style={{width: ancho, height: alto}}>
+                        <BarChart2/>
+                    </div>
+                    Arriba 1
+                    <div style={{width: ancho, height: alto}}>
+                    <Pie2 data={data} /*options={options}*/ onUpdate={updatePlot} />
+                    </div>
+                    Abajo 1
+                    <br></br>
+                    Arriba 2
+                    <div style={{width: ancho, height: alto}}>
+                        <Chart data={data} /*options={options}*/ onUpdate={updatePlot} />
+                    </div>
+                    Abajo 2
+                    <br></br>
                 </div>
-                <div style={{width: ancho, height: alto}}>
-                    <BarChart/>
-                </div>
-                <div style={{width: ancho, height: alto}}>
-                    <SegmentChart/>
-                </div>
-                <div style={{width: ancho, height: alto}}>
-                    <SegmentChartGrandient/>
-                </div>
-                <div style={{width: ancho, height: alto}}>
-                    <BarChart2/>
-                </div>
-                Arriba 1
-                <div style={{width: ancho, height: alto}}>
-                <Pie2 data={data} /*options={options}*/ onUpdate={updatePlot} />
-                </div>
-                Abajo 1
-                <br></br>
-                Arriba 2
-                <div style={{width: ancho, height: alto}}>
-                    <Chart data={data} /*options={options}*/ onUpdate={updatePlot} />
-                </div>
-                Abajo 2
-                <br></br>
-            </div>
+            </AnimationRevealPage>
     );
 }
 export default Reportes

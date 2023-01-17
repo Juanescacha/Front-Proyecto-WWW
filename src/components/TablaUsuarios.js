@@ -96,7 +96,7 @@ class TablaUsuarios extends Component{
     this.setState({form: {
       name: '',
       email: '',
-      password: 'vacio',
+      password: '',
       role: null,
       is_active: null
     }})
