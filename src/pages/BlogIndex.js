@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import AnimationRevealPage from "helpers/AnimationRevealPage.js"
 import { Container, ContentWithPaddingXl } from "components/misc/Layouts"
 import tw from "twin.macro"
@@ -8,6 +8,7 @@ import Header from "components/headers/light.js"
 import Footer from "components/footers/FiveColumnWithInputForm.js"
 import { SectionHeading } from "components/misc/Headings"
 import { PrimaryButton } from "components/misc/Buttons"
+import axios from "axios"
 
 const HeadingRow = tw.div`flex`
 const Heading = tw(SectionHeading)`text-gray-900`
@@ -50,37 +51,37 @@ const ButtonContainer = tw.div`flex justify-center`
 const LoadMoreButton = tw(PrimaryButton)`mt-16 mx-auto`
 
 const Blog = ({
-  headingText = "Blog Posts",
+  headingText = "Products Posts",
   posts = [
     {
       imageSrc:
-        "https://images.unsplash.com/photo-1499678329028-101435549a4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1024&q=80",
-      category: "Travel Tips",
-      date: "April 21, 2020",
-      title: "Safely Travel in Foreign Countries",
+      "https://xiaomicolombia.vtexassets.com/arquivos/ids/156896/MicrosoftTeams-image--58---1-.png?v=1758679020",
+      category: "1999900",
+      date: "Calle 59 # 5 - 30 Bogotá, D.C",
+      title: "POCO F4",
       description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.  Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-      url: "https://timerse.com",
+        "Poco F4 5G - Smartphone de 8+256GB, Pantalla de 6.67” 120Hz AMOLED, Snapdragon 870, Cámara de 64MP, 4500mAh, 67W Turbo Charging, Nebula Green (Versión ES + 3 años de garantía) con Alexa Manos Libres.",
+      url: "https://www.xiaomi-store.co/xiaomi-poco-f4-eu/p",
       featured: true,
     },
+    MyComponent(0),
+    MyComponent(1),
+    MyComponent(2),
+    MyComponent(3),
+    MyComponent(4),
+    MyComponent(5),
+    MyComponent(7),
+    MyComponent(6),
+    MyComponent(8),
+    MyComponent(9),
+    MyComponent(10),
+    MyComponent(11),
+    MyComponent(12),
+    MyComponent(13),
     getPlaceholderPost(),
     getPlaceholderPost(),
     getPlaceholderPost(),
-    getPlaceholderPost(),
-    getPlaceholderPost(),
-    getPlaceholderPost(),
-    getPlaceholderPost(),
-    getPlaceholderPost(),
-    getPlaceholderPost(),
-    getPlaceholderPost(),
-    getPlaceholderPost(),
-    getPlaceholderPost(),
-    getPlaceholderPost(),
-    getPlaceholderPost(),
-    getPlaceholderPost(),
-    getPlaceholderPost(),
-    getPlaceholderPost(),
-    getPlaceholderPost(),
+  
   ],
 }) => {
   const [visible, setVisible] = useState(7)
@@ -123,6 +124,56 @@ const Blog = ({
       </Container>
       <Footer />
     </AnimationRevealPage>
+  )
+}
+
+const getProducts =async() =>{
+     
+    try {
+        const respuesta =await axios.get('https://api-www-5c6w.onrender.com/api/products/')
+        console.log("Respuesta: ", respuesta.data[0].name)
+        console.log("DATA = ",respuesta.data)
+
+        axios.get('https://api-www-5c6w.onrender.com/api/products/',{ params: {id:'1'}
+        }).then(response=> {
+            this.products=response.data
+            console.log(this.products)
+        }).catch(e =>{
+            console.log(e)
+        })
+        
+
+    }catch(error){
+        console.log(error)
+    }
+}
+function MyComponent(a) {
+  const [data, setData] = useState(null);
+
+  useEffect(() => {
+    axios.get('https://api-www-5c6w.onrender.com/api/products/')
+      .then(response => {
+        setData(response.data);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }, []);
+
+  if (!data) {
+    return <div>Loading...</div>;
+  }
+  
+  
+  return (
+        {
+              imageSrc: data[a].url_image,
+              category: data[a].vendor_address,
+              date: data[a].price,
+              title: data[a].name,
+              description: data[a].id,
+              url: data[a].url_origin,
+        }
   )
 }
 
