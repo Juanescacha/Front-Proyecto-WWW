@@ -8,6 +8,10 @@ import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react"
 import { useNavigate } from "react-router-dom"
 import { Profile } from "../components/Profile"
 
+//import {auth0} from 'https://cdn.auth0.com/js/auth0/9.11/auth0.min.js'
+//import {auth0} from '../component/auth0.min.js'
+import { WebAuth } from "auth0-js"
+
 const Prueba = () => {
 
   const {user, isAuthenticated, loginWithRedirect, logout} = useAuth0()
@@ -15,6 +19,31 @@ const Prueba = () => {
   const navigate = useNavigate()
 
   const [rol, setRol] = useState('');
+
+  var webAuth = new WebAuth({
+    domain:       'proywww.us.auth0.com',
+    //domain:       'proywww.us.auth0.com/dbconnections/signup',
+    //domain:       'proywww.us.auth0.com/dbconnections/signup/',
+    clientID:     '9igEug9RqhLg5U0I4rvPJ2Q3J3syuLTi'
+  });
+  
+  const respuesta = webAuth.signup({ 
+    connection: 'Username-Password-Authentication', 
+    email: 'enero16@correo.com', 
+    password: 'Auth0-2023',
+    username: "johndoe",
+    given_name: "John",
+    family_name: "Doe",
+    name: "John Doe",
+    nickname: "johnny",
+    picture: "http://example.org/jdoe.png",
+    user_metadata: { plan: 'silver', team_id: 'a111' }
+  }, function (err) { 
+    if (err) return alert('Something went wrong: ' + err.message);
+      return alert('success signup without login!') 
+  });
+
+  console.log('Respuesta Auth0: ', respuesta)
 
   /*
   const getPersonas = async() => {
@@ -57,7 +86,7 @@ const Prueba = () => {
     results
       .then(response => response.json())
       .then(data => {
-        console.log(data)
+        //console.log(data)
       })
   }
 
@@ -71,7 +100,7 @@ const Prueba = () => {
 
   // Probando POST
   const postUser = () => {
-    console.log('uno')
+    //console.log('uno')
     const results = fetch('https://api-www-5c6w.onrender.com/api/users/', {
       method: 'POST',
       body: JSON.stringify(datosU),
@@ -83,10 +112,10 @@ const Prueba = () => {
     results
       .then(response => response.json())
       .then(data => {
-        console.log('Resultado POST: ',data)
-        console.log('dos')
+        //console.log('Resultado POST: ',data)
+        //console.log('dos')
       })
-      console.log('tres')
+      //console.log('tres')
   }
 
   /*
@@ -106,13 +135,13 @@ const Prueba = () => {
     results
       .then(response => response.json())
       .then(data => {
-        console.log("Data: ", data)
-        console.log("Rol: ", data.role)
-        console.log("Email Auth0: ", user.email)
+        //console.log("Data: ", data)
+        //console.log("Rol: ", data.role)
+        //console.log("Email Auth0: ", user.email)
         setRol(data.role)
       })  
     } catch (error) {
-      console.log(error)
+      //console.log(error)
     }
     
   }
@@ -136,5 +165,5 @@ const Prueba = () => {
   )
 }
 
-//export default Prueba
-export default withAuthenticationRequired(Prueba, {onRedirecting: () => <Spinner animation="border" />, });
+export default Prueba
+//export default withAuthenticationRequired(Prueba, {onRedirecting: () => <Spinner animation="border" />, });
