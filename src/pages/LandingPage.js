@@ -26,76 +26,81 @@ const LandingPage = () => {
       <Hero
         heading={
           <>
-            Delicious & Affordable{" "}
-            <HighlightedText>Meals Near You.</HighlightedText>
+            Móviles y Celulares{" "}
+            <HighlightedText>Ultimos en Tecnologia</HighlightedText>
           </>
         }
-        description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-        imageSrc="https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=768&q=80"
+        description="Los mejores productos de todas las marcas, con la mejor calidad y precio del mercado."
+        imageSrc="https://cdn.shopify.com/s/files/1/0485/4566/1094/files/Captura_de_Pantalla_2022-08-09_a_la_s_11.53.18_p._m._2100x.png?v=1660107224"
         imageCss={imageCss}
         imageDecoratorBlob={true}
-        primaryButtonText="Order Now"
-        watchVideoButtonText="Meet The Chefs"
+        primaryButtonText="Ordenar Ahora"
+        watchVideoButtonText="Ultimo lanzamiento"
       />
       <MainFeature
-        subheading={<Subheading>Established Since 2014</Subheading>}
+        subheading={<Subheading>Establecido Desde 2014</Subheading>}
+        imageRounded={false}
         heading={
           <>
-            We've been serving for
-            <wbr /> <HighlightedText>over 5 years.</HighlightedText>
+            Hemos estado sirviendo por
+            <wbr /> <HighlightedText>al menos 5 años</HighlightedText>
           </>
         }
         description={
           <Description>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            Bienvenido a la página web de Celulares, donde encontrarás las
+            últimas novedades en teléfonos celulares y toda la información que
+            necesitas para hacer una buena elección.
             <br />
             <br />
-            Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
-            nisi ut aliquip ex ea commodo consequat.
+            En esta página, encontrarás todo lo que necesitas saber para escoger
+            el mejor teléfono para ti. Desde los últimos modelos de teléfonos
+            inteligentes, hasta los teléfonos más antiguos y económicos,
+            encontrarás una amplia variedad de información para ayudarte a tomar
+            la mejor decisión.
           </Description>
         }
         buttonRounded={false}
         textOnLeft={false}
-        primaryButtonText="Latest Offers"
+        primaryButtonText="Ultimas Ofertas"
         imageSrc={
-          "https://images.unsplash.com/photo-1460306855393-0410f61241c7?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=768&q=80"
+          "https://www.apple.com/v/iphone/home/bk/images/overview/hero/iphone_14_hero__ceub5xriecgi_large.jpg"
         }
         imageCss={imageCss}
-        imageDecoratorBlob={true}
+        imageDecoratorBlob={false}
         imageDecoratorBlobCss={tw`left-1/2 -translate-x-1/2 md:w-32 md:h-32 opacity-25`}
       />
       {/* TabGrid Component also accepts a tabs prop to customize the tabs and its content directly. Please open the TabGrid component file to see the structure of the tabs props.*/}
       <TabGrid
         heading={
           <>
-            Checkout our <HighlightedText>menu.</HighlightedText>
+            Mira nuestros <HighlightedText>productos.</HighlightedText>
           </>
         }
       />
       <Features
         heading={
           <>
-            Amazing <HighlightedText>Services.</HighlightedText>
+            Excelentes <HighlightedText>Servicios</HighlightedText>
           </>
         }
         cards={[
           {
             imageSrc: shopIconImageSrc,
-            title: "230+ Locations",
-            description: "Lorem ipsum donor amet siti ceali placeholder text",
+            title: "230+ Tiendas Fisicas",
+            description: "Tiendas en las principales ciudades del pais",
             url: "https://google.com",
           },
           {
             imageSrc: chefIconImageSrc,
-            title: "Professional Chefs",
-            description: "Lorem ipsum donor amet siti ceali placeholder text",
+            title: "Te atendemos en 24 horas",
+            description: "Atencion personalizada y rapida",
             url: "https://timerse.com",
           },
           {
             imageSrc: celebrationIconImageSrc,
-            title: "Birthday Catering",
-            description: "Lorem ipsum donor amet siti ceali placeholder text",
+            title: "Promocion de Cumpleaños",
+            description: "Descuentos especiales para nuestros clientes",
             url: "https://reddit.com",
           },
         ]}
@@ -103,49 +108,53 @@ const LandingPage = () => {
         imageCss={tw`w-20! h-20!`}
       />
       <MainFeature2
-        subheading={<Subheading>A Reputed Brand</Subheading>}
+        subheading={<Subheading>Somos Reconocidos</Subheading>}
         heading={
           <>
-            Why <HighlightedText>Choose Us ?</HighlightedText>
+            Porque <HighlightedText>Elegirnos ?</HighlightedText>
           </>
         }
         statistics={[
           {
-            key: "Orders",
+            key: "Ordenes",
             value: "94000+",
           },
           {
-            key: "Customers",
+            key: "Clientes",
             value: "11000+",
           },
           {
-            key: "Chefs",
+            key: "Marcas",
             value: "1500+",
           },
         ]}
-        primaryButtonText="Order Now"
-        primaryButtonUrl="https://order.now.com"
+        primaryButtonText="Ordenar Ahora"
+        primaryButtonUrl="#"
         imageInsideDiv={false}
-        imageSrc="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEzNzI2fQ&auto=format&fit=crop&w=768&q=80"
+        imageSrc="https://www.altonivel.com.mx/wp-content/uploads/2018/06/mejores-celulares-2018.jpg"
         imageCss={Object.assign(tw`bg-cover`, imageCss)}
         imageContainerCss={tw`md:w-1/2 h-auto`}
         imageDecoratorBlob={true}
         imageDecoratorBlobCss={tw`left-1/2 md:w-32 md:h-32 -translate-x-1/2 opacity-25`}
         textOnLeft={true}
+        description="
+        Nuestra empresa ofrece un servicio de calidad, con atención personalizada y una amplia variedad de productos para satisfacer todas sus necesidades. Ofrecemos precios competitivos y envíos rápidos para que reciba sus productos lo antes posible. Nos esforzamos por ofrecer la mejor experiencia de compra posible. Estamos comprometidos a proporcionar a nuestros clientes el mejor servicio y productos de calidad."
       />
       <Testimonial
         subheading=""
         heading={
           <>
-            Customers <HighlightedText>Love Us.</HighlightedText>
+            Nuestros Clientes{" "}
+            <HighlightedText>Nos Recomiendan.</HighlightedText>
           </>
         }
       />
       <DownloadApp
+        subheading="Descargar App"
         text={
           <>
-            People around you are ordering delicious meals using the{" "}
-            <HighlightedTextInverse>Treact App.</HighlightedTextInverse>
+            Personas alrededor de ti estan ordenando excelentes telefonos usando
+            <HighlightedTextInverse>Nuestra App.</HighlightedTextInverse>
           </>
         }
       />
