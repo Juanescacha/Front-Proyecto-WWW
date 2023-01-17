@@ -57,7 +57,7 @@ const Prueba = () => {
     results
       .then(response => response.json())
       .then(data => {
-        console.log(data)
+        //console.log(data)
       })
   }
 
@@ -71,7 +71,7 @@ const Prueba = () => {
 
   // Probando POST
   const postUser = () => {
-    console.log('uno')
+    //console.log('uno')
     const results = fetch('https://api-www-5c6w.onrender.com/api/users/', {
       method: 'POST',
       body: JSON.stringify(datosU),
@@ -83,10 +83,10 @@ const Prueba = () => {
     results
       .then(response => response.json())
       .then(data => {
-        console.log('Resultado POST: ',data)
-        console.log('dos')
+        //console.log('Resultado POST: ',data)
+        //console.log('dos')
       })
-      console.log('tres')
+      //console.log('tres')
   }
 
   /*
@@ -106,13 +106,13 @@ const Prueba = () => {
     results
       .then(response => response.json())
       .then(data => {
-        console.log("Data: ", data)
-        console.log("Rol: ", data.role)
-        console.log("Email Auth0: ", user.email)
+        //console.log("Data: ", data)
+        //console.log("Rol: ", data.role)
+        //console.log("Email Auth0: ", user.email)
         setRol(data.role)
       })  
     } catch (error) {
-      console.log(error)
+      //console.log(error)
     }
     
   }
@@ -136,5 +136,5 @@ const Prueba = () => {
   )
 }
 
-//export default Prueba
-export default withAuthenticationRequired(Prueba, {onRedirecting: () => <Spinner animation="border" />, });
+export default Prueba
+//export default withAuthenticationRequired(Prueba, {onRedirecting: () => <Spinner animation="border" />, });
