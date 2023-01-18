@@ -7,7 +7,7 @@ import { Spinner } from 'react-bootstrap'
 import { Profile } from "../components/Profile"
 import DataTable from 'react-data-table-component'
 import 'bootstrap/dist/css/bootstrap.min.css'
-import { faEdit, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { faBan, faCheck, faEdit, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import {Modal, ModalBody, ModalHeader, ModalFooter} from 'reactstrap'
 import { Component } from "react"
 import axios from "axios"
@@ -176,7 +176,11 @@ class TablaUsuarios extends Component{
                   <td>
                     <button className="btn btn-primary" onClick={()=>{this.seleccionarUsuario(usuario); this.modalEditar()}}><FontAwesomeIcon icon={faEdit}/></button>
                     {"  "}
-                    <button className="btn btn-danger" onClick={()=>{this.seleccionarUsuario(usuario); this.setState({modalBloquear: true}) }}><FontAwesomeIcon icon="fa-solid fa-ban"/></button>
+                    { usuario.is_active ? 
+                      <button className="btn btn-danger" title="Cambiar estado" onClick={()=>{this.seleccionarUsuario(usuario); this.setState({modalBloquear: true}) }}><FontAwesomeIcon icon={faBan}/></button>
+                    :
+                      <button className="btn btn-success" title="Cambiar estado" onClick={()=>{this.seleccionarUsuario(usuario); this.setState({modalBloquear: true}) }}><FontAwesomeIcon icon={faCheck}/></button>
+                    }
                   </td>
                 </tr>
               )
@@ -239,7 +243,7 @@ class TablaUsuarios extends Component{
           <button className="btn btn-success" onClick={() => this.peticionPost()}>
             Insertar
           </button>
-          <button className="brn btn-danger" onClick={() => this.modalInsertar()}>Cancelar</button>
+          <button className="btn btn-danger" onClick={() => this.modalInsertar()}>Cancelar</button>
         </ModalFooter>
       </Modal>
 
@@ -301,7 +305,7 @@ class TablaUsuarios extends Component{
       {/* Modal Bloquear Usuario */}
       <Modal isOpen={this.state.modalBloquear}>
         <ModalBody>
-          ¿Estás seguro que deseas bloquear al usuario {form && form.name}?
+          ¿Estás seguro que deseas { form.is_active ? 'bloquear' : 'desbloquear'} al usuario {form && form.name}?
         </ModalBody>
         <ModalFooter>
           <button className="btn btn-danger" onClick={() => this.peticionBloquear()}>Sí</button>

@@ -10,13 +10,14 @@ import logo from "../../images/logo.svg"
 import { ReactComponent as MenuIcon } from "feather-icons/dist/icons/menu.svg"
 import { ReactComponent as CloseIcon } from "feather-icons/dist/icons/x.svg"
 
-import { LoginButton } from "components/LoginButton.js"
 import { LogoutButton } from "components/LogOutButton.js"
 import { Profile } from "components/Profile.js"
 import { useAuth0 } from "@auth0/auth0-react"
 import { useNavigate } from "react-router-dom"
 import Usuarios from "pages/Usuarios.js"
 import Reportes from "pages/Reportes.js"
+
+import {Modal, ModalBody, ModalHeader, ModalFooter} from 'reactstrap'
 
 const Header = tw.header`
   flex justify-between items-center
@@ -89,7 +90,65 @@ const HeaderLight = ({
   const [rol, setRol] = useState('vacio');
   const [datosUser,setUser] = useState('vacio')
 
+  const [modalNombre, setModalNombre] = useState(false)
+  const [nombre, setNombre] = useState('')
+
   const navigate = useNavigate()
+
+  const registroBD = () => {
+    const correoVerificado = user.email_verified
+    if ( correoVerificado ){
+        const datosUG = {
+            "name": user.given_name,
+            "email": user.email,
+            "password": "vacio",
+            "role": "client",
+            "is_active": true
+        }
+
+        const results = fetch('https://api-www-5c6w.onrender.com/api/users/', {
+      method: 'POST',
+      body: JSON.stringify(datosUG),
+      headers: {
+          'Content-Type': 'application/json',
+          //authorization: `Bearer ${token}`
+      },
+    });
+    results
+      .then(response => response.json())
+      .then(data => {
+        console.log('Resultado POST: ',data)
+        navigate('/')
+      })
+    } else{
+      setModalNombre(true)
+    }
+  }
+
+  const postUser = () => {
+    console.log('Entro en postUser, nombre: ', nombre)
+    const datosU = {
+      "name": nombre,
+      "email": user.email,
+      "password": "vacio",
+      "role": "client",
+      "is_active": true
+    }
+    const results = fetch('https://api-www-5c6w.onrender.com/api/users/', {
+      method: 'POST',
+      body: JSON.stringify(datosU),
+      headers: {
+          'Content-Type': 'application/json',
+          //authorization: `Bearer ${token}`
+      },
+  });
+    results
+      .then(response => response.json())
+      .then(data => {
+        console.log('Resultado POST: ',data)
+        //navigate('/')
+      })
+  }
 
   const obtenerRol = () => {
     if(isAuthenticated){
@@ -100,18 +159,11 @@ const HeaderLight = ({
         .then(data => {
           setRol(data.role)
           setUser(data)
-          //console.log('Data: ', data)
+          console.log('Data: ', data)
           console.log('Role useState: ', rol)
           console.log('data.role: ', data.role)
 
-          if( !data.is_active ){
-            window.alert(
-              "Su cuenta ha sido bloqueada por el administrador"
-            )
-            logout({returnTo: window.location.origin })
-          } else {
-            verificarRol()
-          }
+          verificarRol()
         })
       } catch (error) {
         console.log(error)
@@ -121,12 +173,28 @@ const HeaderLight = ({
   }
 
   const verificarRol = () => {
+
     if (isAuthenticated) {
+      //obtenerRol()
+
+      console.log("Autenticado: ", isAuthenticated)
+      console.log('Rol: ', rol)
+      console.log('DatosUser: ', datosUser)
+      //console.log('DatusUser Lenght: ', Object.keys(datosUser).length)
+
       if(datosUser === null || datosUser === undefined || datosUser.detail === 'Not found.'){
         //console.log('null o undefined O \'Not found\'')
         //console.log('De Auth0: ', user)
+        //navigate('/signup') // ASN corregir
+        //setModalNombre(true)
+        //registroBD()
+      }
+      //if(datosUser===null){
+      /*
+      if(datosUser.detail === 'Not found.'){
         navigate('/signup')
       }
+      */
     }
 }
 
@@ -169,7 +237,7 @@ const HeaderLight = ({
       ) : (
         <>
           {/*<NavLink href="/#" onClick={() => loginWithRedirect()}>Login</NavLink>*/}
-          <PrimaryLink css={roundedHeaderButton && tw`rounded-full`} onClick={() => loginWithRedirect()}> Iniciar sesión </PrimaryLink>
+          <PrimaryLink css={roundedHeaderButton && tw`rounded-full`} href="/#" onClick={() => loginWithRedirect()}> Iniciar sesión </PrimaryLink>
         </>
       )}
       {/*<NavLink href="/login" tw="lg:ml-12!">Iniciar sesión</NavLink>
@@ -222,6 +290,23 @@ const HeaderLight = ({
           )}
         </NavToggle>
       </MobileNavLinksContainer>
+
+      <Modal isOpen={modalNombre}>
+        <ModalHeader style={{display: 'block'}}>
+          <span style={{float: 'left'}}>Por favor, finaliza tu registro ingresando tu nombre</span>
+        </ModalHeader>
+        <ModalBody>
+          <div className="form-group">
+            <label htmlFor="name">Nombre</label>
+            <input className="form-control" type="text" name="name"id="name" onChange={(ev) => setNombre(ev.target.value)}/>
+          </div>
+        </ModalBody>
+
+        <ModalFooter>
+          <button className="btn btn-success" onClick={()=>{setModalNombre(false); postUser() }}>Guardar</button>
+          <button className="btn btn-danger" onClick={()=>{setModalNombre(false); logout({returnTo: window.location.origin }) }}>Cerrar sesión</button>
+        </ModalFooter>
+      </Modal>
     </Header>
   )
 }
