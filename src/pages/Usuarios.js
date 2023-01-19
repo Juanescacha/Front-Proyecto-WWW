@@ -110,7 +110,7 @@ const Usuarios = () => {
   ]
 
   useEffect(() => {
-    usuarios1()
+    //usuarios1()
   }, []);
 
   return (

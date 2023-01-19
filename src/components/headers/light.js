@@ -164,7 +164,7 @@ const HeaderLight = ({
           {/*<Profile />*/}
           {/*<LogoutButton />*/}
           {/*<NavLink href="/#" onClick={ () => logout({returnTo: window.location.origin }) }>LogOut</NavLink>*/}
-          <PrimaryLink css={roundedHeaderButton && tw`rounded-full`} href="/#" onClick={ () => logout({returnTo: window.location.origin }) }> Cerrar sesión </PrimaryLink>
+          <PrimaryLink css={roundedHeaderButton && tw`rounded-full`} /*href="/#"*/ onClick={ () => logout({returnTo: window.location.origin }) }> Cerrar sesión </PrimaryLink>
         </>
       ) : (
         <>

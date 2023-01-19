@@ -5,7 +5,6 @@ import AnimationRevealPage from "helpers/AnimationRevealPage.js"
 
 import { Spinner } from 'react-bootstrap'
 import { Profile } from "../components/Profile"
-import DataTable from 'react-data-table-component'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { faBan, faCheck, faEdit, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import {Modal, ModalBody, ModalHeader, ModalFooter} from 'reactstrap'
@@ -38,17 +37,37 @@ class TablaUsuarios extends Component{
   }
 
   peticionPost = async () => {
-    await axios.post('https://api-www-5c6w.onrender.com/api/users/',this.state.form).then(response => {
-      this.registroAuth0({
-        nombre: this.state.form.name,
-        email: this.state.form.email,
-        password: this.state.form.password
+    if( this.validarEmailBD(this.state.form.email) ){
+      await axios.post('https://api-www-5c6w.onrender.com/api/users/',this.state.form).then(response => {
+        this.registroAuth0({
+          nombre: this.state.form.name,
+          email: this.state.form.email,
+          password: this.state.form.password
+        })
+        this.modalInsertar()
+        this.peticionGet()
+      }).catch(error => {
+        console.log('error.message: ', error.message)
+        console.log('error', error)
       })
-      this.modalInsertar()
-      this.peticionGet()
-    }).catch(error => {
-      console.log(error.message)
+    }else{
+      window.alert(
+        "Ese correo ya se encuentra en la base de datos"
+      )
+    }
+  }
+
+  validarEmailBD = (unEmail) => {
+    var salida = true
+    this.state.data.map(usuario => {
+      //console.log('Correos en BD: ', usuario.email)
+      if( usuario.email === unEmail){
+        //console.log('Entró')
+        salida = false
+      }
     })
+    //console.log('No entró')
+    return salida
   }
 
   peticionPut = async () => {
@@ -147,6 +166,7 @@ class TablaUsuarios extends Component{
   render(){
     const {form}=this.state;
     //this.registroAuth0()
+    //this.validarEmailBD()
     
   return (
     <div className="TablaUsuarios">
