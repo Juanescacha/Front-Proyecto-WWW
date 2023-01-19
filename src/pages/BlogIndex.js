@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import AnimationRevealPage from "helpers/AnimationRevealPage.js"
 import { Container, ContentWithPaddingXl } from "components/misc/Layouts"
 import tw from "twin.macro"
@@ -8,6 +8,7 @@ import Header from "components/headers/light.js"
 import Footer from "components/footers/FiveColumnWithInputForm.js"
 import { SectionHeading } from "components/misc/Headings"
 import { PrimaryButton } from "components/misc/Buttons"
+import axios from "axios"
 
 const HeadingRow = tw.div`flex`
 const Heading = tw(SectionHeading)`text-gray-900`
@@ -49,9 +50,39 @@ const Description = tw.div``
 const ButtonContainer = tw.div`flex justify-center`
 const LoadMoreButton = tw(PrimaryButton)`mt-16 mx-auto`
 
+function Product(a) {
+  const [data, setData] = useState(null);
+
+  useEffect(() => {
+    axios.get('https://api-www-5c6w.onrender.com/api/products/')
+      .then(response => {
+        setData(response.data);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }, []);
+
+  if (!data) {
+    return <div>Loading...</div>;
+  }
+  
+  
+  return (
+        {
+              imageSrc: data[a].url_image,
+              category: data[a].vendor_address,
+              date: data[a].price,
+              title: data[a].name,
+              description: data[a].id,
+              url: data[a].url_origin,
+        }
+  )
+}
+
 const Blog = ({
   headingText = "Blog Posts",
-  posts = [
+  posts = [Product(1),
     {
       imageSrc:
         "https://images.unsplash.com/photo-1499678329028-101435549a4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1024&q=80",
