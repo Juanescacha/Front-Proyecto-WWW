@@ -82,7 +82,7 @@ function Product(a) {
 
 const Blog = ({
   headingText = "Blog Posts",
-  posts = [Product(1),
+  posts = [//Product(1),
     {
       imageSrc:
         "https://images.unsplash.com/photo-1499678329028-101435549a4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1024&q=80",

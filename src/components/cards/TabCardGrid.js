@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import tw from "twin.macro";
 import styled from "styled-components";
@@ -9,6 +9,7 @@ import { PrimaryButton as PrimaryButtonBase } from "components/misc/Buttons.js";
 import { ReactComponent as StarIcon } from "images/star-icon.svg";
 import { ReactComponent as SvgDecoratorBlob1 } from "images/svg-decorator-blob-5.svg";
 import { ReactComponent as SvgDecoratorBlob2 } from "images/svg-decorator-blob-7.svg";
+import axios from "axios"
 
 const HeaderRow = tw.div`flex justify-between items-center flex-col xl:flex-row`;
 const Header = tw(SectionHeading)``;
@@ -57,11 +58,77 @@ const DecoratorBlob1 = styled(SvgDecoratorBlob1)`
 const DecoratorBlob2 = styled(SvgDecoratorBlob2)`
   ${tw`pointer-events-none -z-20 absolute left-0 bottom-0 h-80 w-80 opacity-15 transform -translate-x-2/3 text-primary-500`}
 `;
+function Product() {
+  const [data, setData] = useState(null);
+
+  useEffect(() => {
+    axios.get('https://api-www-5c6w.onrender.com/api/products/')
+      .then(response => {
+        setData(response.data);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }, []);
+
+  if (!data) {
+    return <div>Loading...</div>;
+  }
+  console.log(data.length)
+  console.log(data[1])
+  let productList=[]
+  
+  for (var i=0;i<data.length;i++){
+    const rate=Math.random()*5
+  const review=(Math.random()*100)
+    let productNew= {
+      imageSrc : data[i].url_image,
+      title:data[i].name,
+      content: data[i].vendor_address,
+      price: "$"+data[i].price,
+      rating: rate.toString(),
+      reviews: review.toString(),
+      url: data[i].url_origin
+    }
+    productList.push(productNew);
+  }
+  return (productList)
+}
+function Item(a) {
+  const [data, setData] = useState(null);
+
+  useEffect(() => {
+    axios.get('https://api-www-5c6w.onrender.com/api/products/')
+      .then(response => {
+        setData(response.data);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }, []);
+
+  if (!data) {
+    return <div>Loading...</div>;
+  }
+  
+  
+  return (
+        {
+              imageSrc: data[a].url_image,
+              content: data[a].vendor_address,
+              price: data[a].price,
+              title: data[a].name,
+              rating: data[a].id,
+              reviews:"86",
+              url: data[a].url_origin,
+        }
+  )
+}
 
 export default ({
   heading = "Checkout the Menu",
   tabs = {
-    Starters: [
+    Starters: [Item(1),
       {
         imageSrc:
           "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=80",
