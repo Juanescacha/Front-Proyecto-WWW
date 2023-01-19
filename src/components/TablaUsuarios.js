@@ -25,8 +25,88 @@ class TablaUsuarios extends Component{
       password: '',
       role: null,
       is_active: null
-    }
+    },
+    campo: {},
+    error: {},
+    enviado: false
   }
+
+  validarFormulario() {
+
+    // name email password role is_active
+    //let campo = this.state.campo;
+    let campo = this.state.form;
+    let error = {};
+    let formularioValido = true;
+     
+    // Nombre
+    if (!campo["name"]) {
+      formularioValido = false;
+      error["name"] = "Por favor, ingresa un nombre";
+    }
+
+    // Password
+    if (!campo["password"]) {
+      formularioValido = false;
+      error["password"] = "Por favor, ingresa una contraseña";
+    }
+     
+    // Email
+    if (!campo["email"]) {
+      formularioValido = false;
+      error["email"] = "Por favor, ingresa un correo válido";
+    }
+     
+    // Validamos si el formato del Email es correcto 
+    if (typeof campo["email"] !== "undefined") {
+      let posicionArroba = campo["email"].lastIndexOf('@');
+      let posicionPunto = campo["email"].lastIndexOf('.');
+  
+      if (!(posicionArroba < posicionPunto && posicionArroba > 0 && campo["email"].indexOf('@@') == -1 && posicionPunto > 2 && (campo["email"].length - posicionPunto) > 2)) {
+        formularioValido = false;
+        error["email"] = "Por favor, ingresa un correo válido.";
+      }
+    }
+     
+    // Rol
+    if (!campo["role"]) {
+      formularioValido = false;
+      error["role"] = "Por favor, selecciona un rol";
+    }
+
+    // Estado | is_active
+    if (!campo["is_active"]) {
+      formularioValido = false;
+      error["is_active"] = "Por favor, selecciona un estado";
+    }
+     
+    // Seteo el estado de error 
+    this.setState({
+      error: error
+    });
+  
+    return formularioValido;
+  }
+
+  enviarFormulario( /*e*/ ) {
+        //e.preventDefault();
+     
+        // Si la validación de los campos del formulario ha sido realizada 
+        if (this.validarFormulario()) {
+     
+            // Cambio el estado de 'enviado' a 'true'
+            //this.setState({
+            //    enviado: true
+            //});
+     
+            // Muestro el mensaje que se encuentra en la función mensajeEnviado()
+            //return this.mensajeEnviado();
+            console.log('Todo parece estar correcto')
+        } else {
+          console.log('Parece que hay error en el formulario')
+        }
+     
+    }
 
   peticionGet = () => {
     axios.get('https://api-www-5c6w.onrender.com/api/users/').then(response => {
@@ -37,23 +117,26 @@ class TablaUsuarios extends Component{
   }
 
   peticionPost = async () => {
-    if( this.validarEmailBD(this.state.form.email) ){
-      await axios.post('https://api-www-5c6w.onrender.com/api/users/',this.state.form).then(response => {
-        this.registroAuth0({
-          nombre: this.state.form.name,
-          email: this.state.form.email,
-          password: this.state.form.password
+    //this.enviarFormulario()
+    if (this.validarFormulario()) {
+      if( this.validarEmailBD(this.state.form.email) ){
+        await axios.post('https://api-www-5c6w.onrender.com/api/users/',this.state.form).then(response => {
+          this.registroAuth0({
+            nombre: this.state.form.name,
+            email: this.state.form.email,
+            password: this.state.form.password
+          })
+          this.modalInsertar()
+          this.peticionGet()
+        }).catch(error => {
+          console.log('error.message: ', error.message)
+          console.log('error', error)
         })
-        this.modalInsertar()
-        this.peticionGet()
-      }).catch(error => {
-        console.log('error.message: ', error.message)
-        console.log('error', error)
-      })
-    }else{
-      window.alert(
-        "Ese correo ya se encuentra en la base de datos"
-      )
+      }else{
+        window.alert(
+          "Ese correo ya se encuentra en la base de datos"
+        )
+      }
     }
   }
 
@@ -71,13 +154,15 @@ class TablaUsuarios extends Component{
   }
 
   peticionPut = async () => {
-    console.log('this.state.form: ', this.state.form)
-    await axios.put('https://api-www-5c6w.onrender.com/api/users/'+this.state.form.email+'/',this.state.form).then(response => {
-      this.modalEditar()
-      this.peticionGet()
-    }).catch(error => {
-      console.log(error.message)
-    })
+    if (this.validarFormulario()) {
+      console.log('this.state.form: ', this.state.form)
+      await axios.put('https://api-www-5c6w.onrender.com/api/users/'+this.state.form.email+'/',this.state.form).then(response => {
+        this.modalEditar()
+        this.peticionGet()
+      }).catch(error => {
+        console.log(error.message)
+      })
+    }
   }
 
   peticionBloquear = async () => {
@@ -118,10 +203,13 @@ class TablaUsuarios extends Component{
       password: '',
       role: null,
       is_active: null
-    }})
+    },
+      error: {}
+    },)
   }
-  modalEditar = () => {
-    this.setState({modalEditar: !this.state.modalEditar})
+  modalEditar = () => { 
+    // Cambio de estado de campo 
+    this.setState({modalEditar: !this.state.modalEditar, error: {}})
   }
   
   seleccionarUsuario = (usuario) => {
@@ -137,14 +225,20 @@ class TablaUsuarios extends Component{
   }
 
   handleChange = async e => {
+
+    let campo1 = this.state.campo;
+    campo1[e.target.name] = e.target.value;
+
     e.persist()
     await this.setState({
       form:{
         ...this.state.form,
         [e.target.name]: e.target.value
-      }
+      },
+      campo: campo1
     })
-    console.log(this.state.form)
+    console.log('this.state.form: ', this.state.form)
+    console.log('this.state.campo: ', this.state.campo)
   }
 
   componentDidMount() {
@@ -218,13 +312,18 @@ class TablaUsuarios extends Component{
           <div className="form-group">
             <label htmlFor="name">Nombre</label>
             <input className="form-control" type="text" name="name"id="name" onChange={this.handleChange} value={form.name}/>
-            <br />
+            <span style={{color: "red"}}>{this.state.error["name"]}</span>
+            <br /><br />
             <label htmlFor="email">Correo</label>
-            <input className="form-control" type="text" name="email"id="email" onChange={this.handleChange} value={form.email}/>
-            <br />
+            <input className="form-control" type="email" name="email" id="email" onChange={this.handleChange} value={form.email}
+            pattern="[a-zA-Z0-9!#$%&'*_+-]([\.]?[a-zA-Z0-9!#$%&'*_+-])+@[a-zA-Z0-9]([^@&%$\/()=?¿!.,:;]|\d)+[a-zA-Z0-9][\.][a-zA-Z]{2,4}([\.][a-zA-Z]{2})?"/>
+            <small id="emailHelp" className="form-text text-muted">Ejemplo: correo@email.com </small>
+            <span style={{color: "red"}}>{this.state.error["email"]}</span>
+            <br /><br />
             <label htmlFor="password">Password</label>
             <input className="form-control" type="text" name="password"id="password" onChange={this.handleChange} value={form.password}/>
-            <br />
+            <span style={{color: "red"}}>{this.state.error["password"]}</span>
+            <br /><br />
             {/*}
             <label htmlFor="role">Rol</label>
             <input className="form-control" type="text" name="role"id="role"  onChange={this.handleChange} value={form.role}/>
@@ -233,13 +332,14 @@ class TablaUsuarios extends Component{
             <label htmlFor="role">Seleccionar rol:&nbsp;&nbsp;</label>
 
             <select name="role" onChange={this.handleChange} value={form.role}>
-              <option value="none" selected>Selecciona una opción</option>
+              <option value="" selected>Selecciona una opción</option>
               <option value="administrator">Administrador</option>
               <option value="client">Cliente</option>
               <option value="assistant">Asistente</option>
               {/* <option value="value2" selected>Value 2</option> */}
             </select>
-            <br />
+            <br /><span style={{color: "red"}}>{this.state.error["role"]}</span>
+            <br /><br />
             {/*
             <label htmlFor="is_active">Estado</label>
             <input className="form-control" type="bool" name="is_active"id="is_active" onChange={this.handleChange} value={form.is_active}/>
@@ -251,11 +351,12 @@ class TablaUsuarios extends Component{
             <label htmlFor="is_active">Seleccionar estado:&nbsp;&nbsp;</label>
 
             <select name="is_active" onChange={this.handleChange} value={form.is_active}>
-              <option value="none" selected>Selecciona una opción</option>
+              <option value="" selected>Selecciona una opción</option>
               <option value={true}>Activo</option>
               <option value={false}>Inactivo</option>
               {/* <option value="value2" selected>Value 2</option> */}
             </select>
+            <br /><span style={{color: "red"}}>{this.state.error["is_active"]}</span>
           </div>
         </ModalBody>
 
@@ -276,25 +377,24 @@ class TablaUsuarios extends Component{
           <div className="form-group">
             <label htmlFor="name">Nombre</label>
             <input className="form-control" type="text" name="name"id="name" onChange={this.handleChange} value={form.name}/>
-            <br />
+            <span style={{color: "red"}}>{this.state.error["name"]}</span>
+            <br /><br />
+            {/*
             <label htmlFor="email">Correo</label>
-            <input className="form-control" type="text" name="email"id="email" readOnly onChange={this.handleChange} value={form.email}/>
-            <br />
-            {/*}
-            <label htmlFor="role">Rol</label>
-            <input className="form-control" type="text" name="role"id="role"  onChange={this.handleChange} value={form.role}/>
+            <input className="form-control" type="email" name="email"id="email" readOnly onChange={this.handleChange} value={form.email}/>
             <br />
             */}
             <label htmlFor="role">Seleccionar rol:&nbsp;&nbsp;</label>
 
             <select name="role" onChange={this.handleChange} value={form.role}>
-              <option value="none" selected>Selecciona una opción</option>
+              <option value="" selected>Selecciona una opción</option>
               <option value="administrator">Administrador</option>
               <option value="client">Cliente</option>
               <option value="assistant">Asistente</option>
               {/* <option value="value2" selected>Value 2</option> */}
             </select>
-            <br />
+            <br /><span style={{color: "red"}}>{this.state.error["role"]}</span>
+            <br /><br />
             {/*
             <label htmlFor="is_active">Estado</label>
             <input className="form-control" type="bool" name="is_active"id="is_active" onChange={this.handleChange} value={form.is_active}/>
@@ -306,11 +406,12 @@ class TablaUsuarios extends Component{
             <label htmlFor="is_active">Seleccionar estado:&nbsp;&nbsp;</label>
 
             <select name="is_active" onChange={this.handleChange} value={form.is_active}>
-              <option value="none" selected>Selecciona una opción</option>
+              <option value="" selected>Selecciona una opción</option>
               <option value={true}>Activo</option>
               <option value={false}>Inactivo</option>
               {/* <option value="value2" selected>Value 2</option> */}
             </select>
+            <br /><span style={{color: "red"}}>{this.state.error["is_active"]}</span>
           </div>
         </ModalBody>
 
