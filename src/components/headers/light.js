@@ -10,13 +10,13 @@ import logo from "../../images/logo.svg"
 import { ReactComponent as MenuIcon } from "feather-icons/dist/icons/menu.svg"
 import { ReactComponent as CloseIcon } from "feather-icons/dist/icons/x.svg"
 
-import { LoginButton } from "components/LoginButton.js"
-import { LogoutButton } from "components/LogOutButton.js"
-import { Profile } from "components/Profile.js"
+//import { LoginButton } from "components/LoginButton.js"
+//import { LogoutButton } from "components/LogOutButton.js"
+//import { Profile } from "components/Profile.js"
 import { useAuth0 } from "@auth0/auth0-react"
 import { useNavigate } from "react-router-dom"
-import Usuarios from "pages/Usuarios.js"
-import Reportes from "pages/Reportes.js"
+//import Usuarios from "pages/Usuarios.js"
+//import Reportes from "pages/Reportes.js"
 
 const Header = tw.header`
   flex justify-between items-center
@@ -106,19 +106,17 @@ const HeaderLight = ({
             console.log("Role useState: ", rol)
             console.log("data.role: ", data.role)
 
-          if( !data.is_active ){
-            if ( data.detail = 'Not found.' ){
-              verificarRol()
+            if (!data.is_active) {
+              if ((data.detail = "Not found.")) {
+                verificarRol()
+              } else {
+                window.alert("Su cuenta ha sido bloqueada por el administrador")
+                logout({ returnTo: window.location.origin })
+              }
             } else {
-              window.alert(
-                "Su cuenta ha sido bloqueada por el administrador"
-              )
-              logout({returnTo: window.location.origin })
+              verificarRol()
             }
-          } else {
-            verificarRol()
-          }
-        })
+          })
       } catch (error) {
         console.log(error)
       }
@@ -147,7 +145,7 @@ const HeaderLight = ({
       {/*<Profile />*/}
       {rol === "client" ? (
         <>
-          <NavLink href="/">Landing Page</NavLink>
+          <NavLink href="/">Home</NavLink>
         </>
       ) : (
         <></>
@@ -158,7 +156,7 @@ const HeaderLight = ({
           <NavLink href="/usuarios">Usuarios</NavLink>
           <NavLink href="/blogs">Blogs</NavLink>
           <NavLink href="/reportes">Reportes</NavLink>
-          <NavLink href="/">Landing Page</NavLink>
+          <NavLink href="/">Home</NavLink>
         </>
       ) : (
         <></>
@@ -168,7 +166,7 @@ const HeaderLight = ({
           <NavLink href="/productos">Productos</NavLink>
           <NavLink href="/reportes">Reportes</NavLink>
           <NavLink href="/blogs">Blogs</NavLink>
-          <NavLink href="/">Landing Page</NavLink>
+          <NavLink href="/">Home</NavLink>
         </>
       ) : (
         <></>
