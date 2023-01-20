@@ -84,92 +84,115 @@ const HeaderLight = ({
    * If you manipulate links here, all the styling on the links is already done for you. If you pass links yourself though, you are responsible for styling the links or use the helper styled components that are defined here (NavLink)
    */
 
-  const {user, isAuthenticated, loginWithRedirect, logout} = useAuth0()
+  const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0()
 
-  const [rol, setRol] = useState('vacio');
-  const [datosUser,setUser] = useState('vacio')
+  const [rol, setRol] = useState("vacio")
+  const [datosUser, setUser] = useState("vacio")
 
   const navigate = useNavigate()
 
   const obtenerRol = () => {
-    if(isAuthenticated){
+    if (isAuthenticated) {
       try {
-        const results = fetch('https://api-www-5c6w.onrender.com/api/users/' + user.email + '/');
-      results
-        .then(response => response.json())
-        .then(data => {
-          setRol(data.role)
-          setUser(data)
-          //console.log('Data: ', data)
-          console.log('Role useState: ', rol)
-          console.log('data.role: ', data.role)
+        const results = fetch(
+          "https://api-www-5c6w.onrender.com/api/users/" + user.email + "/"
+        )
+        results
+          .then(response => response.json())
+          .then(data => {
+            setRol(data.role)
+            setUser(data)
+            //console.log('Data: ', data)
+            console.log("Role useState: ", rol)
+            console.log("data.role: ", data.role)
 
-          if( !data.is_active ){
-            window.alert(
-              "Su cuenta ha sido bloqueada por el administrador"
-            )
-            logout({returnTo: window.location.origin })
-          } else {
-            verificarRol()
-          }
-        })
+            if (!data.is_active) {
+              window.alert("Su cuenta ha sido bloqueada por el administrador")
+              logout({ returnTo: window.location.origin })
+            } else {
+              verificarRol()
+            }
+          })
       } catch (error) {
         console.log(error)
       }
-        
     }
   }
 
   const verificarRol = () => {
     if (isAuthenticated) {
-      if(datosUser === null || datosUser === undefined || datosUser.detail === 'Not found.'){
+      if (
+        datosUser === null ||
+        datosUser === undefined ||
+        datosUser.detail === "Not found."
+      ) {
         //console.log('null o undefined O \'Not found\'')
         //console.log('De Auth0: ', user)
-        navigate('/signup')
+        navigate("/signup")
       }
     }
-}
+  }
 
   //useEffect( verificarRol )
-  useEffect( obtenerRol )
+  useEffect(obtenerRol)
 
   const defaultLinks = [
     <NavLinks key={1}>
       {/*<Profile />*/}
-      <NavLink href="/blogs">Blogs</NavLink>      
-      { rol === 'client' ? (
+      <NavLink href="/blogs">Blogs</NavLink>
+      {rol === "client" ? (
         <>
           <NavLink href="/productos">Productos</NavLink>
           <NavLink href="/">Landing Page</NavLink>
-        </> ) : ( <></> )
-      }
-      { rol === 'administrator' ? (
+        </>
+      ) : (
+        <></>
+      )}
+      {rol === "administrator" ? (
         <>
           <NavLink href="/productos">Productos</NavLink>
           <NavLink href="/usuarios">Usuarios</NavLink>
           <NavLink href="/reportes">Reportes</NavLink>
           <NavLink href="/">Landing Page</NavLink>
-        </> ) : ( <></> )
-      }
-      { rol === 'assistant' ? (
+        </>
+      ) : (
+        <></>
+      )}
+      {rol === "assistant" ? (
         <>
           <NavLink href="/productos">Productos</NavLink>
           <NavLink href="/reportes">Reportes</NavLink>
           <NavLink href="/">Landing Page</NavLink>
-        </> ) : ( <></> )
-      }
+        </>
+      ) : (
+        <></>
+      )}
 
-      { isAuthenticated ? (
+      {isAuthenticated ? (
         <>
           {/*<Profile />*/}
           {/*<LogoutButton />*/}
           {/*<NavLink href="/#" onClick={ () => logout({returnTo: window.location.origin }) }>LogOut</NavLink>*/}
-          <PrimaryLink css={roundedHeaderButton && tw`rounded-full`} /*href="/#"*/ onClick={ () => logout({returnTo: window.location.origin }) }> Cerrar sesión </PrimaryLink>
+          <PrimaryLink
+            css={roundedHeaderButton && tw`rounded-full`}
+            /*href="/#"*/ onClick={() =>
+              logout({ returnTo: window.location.origin })
+            }
+          >
+            {" "}
+            Cerrar sesión{" "}
+          </PrimaryLink>
         </>
       ) : (
         <>
           {/*<NavLink href="/#" onClick={() => loginWithRedirect()}>Login</NavLink>*/}
-          <PrimaryLink css={roundedHeaderButton && tw`rounded-full`} onClick={() => loginWithRedirect()}> Iniciar sesión </PrimaryLink>
+          <PrimaryLink
+            css={roundedHeaderButton && tw`rounded-full`}
+            onClick={() => loginWithRedirect()}
+          >
+            {" "}
+            Iniciar sesión{" "}
+          </PrimaryLink>
         </>
       )}
       {/*<NavLink href="/login" tw="lg:ml-12!">Iniciar sesión</NavLink>
@@ -186,7 +209,7 @@ const HeaderLight = ({
   const defaultLogoLink = (
     <LogoLink href="/">
       <img src={logo} alt="logo" />
-      Treact
+      TechPhone
     </LogoLink>
   )
 
