@@ -13,6 +13,7 @@ import Prueba from "pages/Prueba"
 import Usuarios from "pages/Usuarios"
 import Reportes from "pages/Reportes"
 import Productos from "pages/Productos"
+import NotFound from "pages/NotFound"
 
 const App = () => {
   return (
@@ -22,12 +23,12 @@ const App = () => {
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/prueba" element={<Prueba />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/usuarios" element={<Usuarios />} />
           <Route path="/reportes" element={<Reportes />} />
           <Route path="/productos" element={<Productos />} />
           <Route path="/blogs" element={<BlogIndexPage />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>
     </>
