@@ -278,15 +278,6 @@ const LandingPage = () => {
           </>
         }
       />
-      <DownloadApp
-        subheading="Descargar App"
-        text={
-          <>
-            Personas alrededor de ti estan ordenando excelentes telefonos usando
-            <HighlightedTextInverse>Nuestra App.</HighlightedTextInverse>
-          </>
-        }
-      />
       <Footer />
     </AnimationRevealPage>
   )
