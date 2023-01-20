@@ -16,6 +16,7 @@ import { useEffect } from 'react';
 import AnimationRevealPage from "helpers/AnimationRevealPage.js"
 import 'bootstrap/dist/css/bootstrap.min.css'
 import HeaderLight from "components/headers/light"
+import ReporteUsuarios from 'components/ReporteUsuarios';
 
 function Reportes() {
 
@@ -151,32 +152,10 @@ function Reportes() {
             <AnimationRevealPage>
                 <HeaderLight />
                 <div>
-                    <div style={{width: ancho, height: alto}}>
-                        <LineChart/>
+                    <div style={{width: "60%", height: alto}}>
+                        <p>Reporte usuarios</p>
+                        <ReporteUsuarios />
                     </div>
-                    <div style={{width: ancho, height: alto}}>
-                        <BarChart/>
-                    </div>
-                    <div style={{width: ancho, height: alto}}>
-                        <SegmentChart/>
-                    </div>
-                    <div style={{width: ancho, height: alto}}>
-                        <SegmentChartGrandient/>
-                    </div>
-                    <div style={{width: ancho, height: alto}}>
-                        <BarChart2/>
-                    </div>
-                    Arriba 1
-                    <div style={{width: ancho, height: alto}}>
-                    <Pie2 data={data} /*options={options}*/ onUpdate={updatePlot} />
-                    </div>
-                    Abajo 1
-                    <br></br>
-                    Arriba 2
-                    <div style={{width: ancho, height: alto}}>
-                        <Chart data={data} /*options={options}*/ onUpdate={updatePlot} />
-                    </div>
-                    Abajo 2
                     <br></br>
                 </div>
             </AnimationRevealPage>
