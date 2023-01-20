@@ -7,5 +7,5 @@ export const LogoutButton = () => {
 
     //return <button onClick={ () => logout({returnTo: window.location.origin }) }>Logout</button>
     //return <Button variant="contained" href="/" size='large' fullWidth onClick={ () => logout({returnTo: window.location.origin }) }>Cerrar sesión</Button>
-    return <Button variant="contained" size='large' fullWidth onClick={ () => logout({returnTo: window.location.origin }) }>Cerrar sesión</Button>
+    return <Button variant="contained" size='large' onClick={ () => logout({returnTo: window.location.origin }) }>Cerrar sesión</Button>
 }

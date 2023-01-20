@@ -106,13 +106,19 @@ const HeaderLight = ({
             console.log("Role useState: ", rol)
             console.log("data.role: ", data.role)
 
-            if (!data.is_active) {
-              window.alert("Su cuenta ha sido bloqueada por el administrador")
-              logout({ returnTo: window.location.origin })
-            } else {
+          if( !data.is_active ){
+            if ( data.detail = 'Not found.' ){
               verificarRol()
+            } else {
+              window.alert(
+                "Su cuenta ha sido bloqueada por el administrador"
+              )
+              logout({returnTo: window.location.origin })
             }
-          })
+          } else {
+            verificarRol()
+          }
+        })
       } catch (error) {
         console.log(error)
       }
