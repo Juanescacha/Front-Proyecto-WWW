@@ -50,7 +50,7 @@ const SocialLink = styled.a`
   }
 `
 
-export default () => {
+const FiveColumnWithInputForm = () => {
   return (
     <Container>
       <Content>
@@ -141,10 +141,10 @@ export default () => {
         <ThreeColRow>
           <LogoContainer>
             <LogoImg src={LogoImage} />
-            <LogoText>Treact Inc.</LogoText>
+            <LogoText>TechPhone</LogoText>
           </LogoContainer>
           <CopywrightNotice>
-            &copy; 2023 Treact Inc. All Rights Reserved.
+            &copy; 2023 TechPhone Inc. All Rights Reserved.
           </CopywrightNotice>
           <SocialLinksContainer>
             <SocialLink href="https://facebook.com">
@@ -162,3 +162,5 @@ export default () => {
     </Container>
   )
 }
+
+export default FiveColumnWithInputForm
