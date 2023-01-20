@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState } from "react"
 import tw from "twin.macro"
 import { css } from "styled-components/macro" //eslint-disable-line
@@ -116,7 +117,6 @@ const LandingPage = () => {
       .catch(err => {
         console.log(err)
       })
-    /// eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (

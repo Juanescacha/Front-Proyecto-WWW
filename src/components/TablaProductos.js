@@ -18,109 +18,37 @@ import axios from "axios"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import "../styles/estilos.css"
 
-class TablaUsuarios extends Component {
+class TablaProductos extends Component {
   state = {
     data: [],
     modalInsertar: false,
     modalEditar: false,
     modalBloquear: false,
     form: {
+      id: "",
       name: "",
-      email: "",
-      password: "",
-      role: null,
+      price: "",
+      url_image: "",
+      url_origin: "",
+      vendor_address: "",
+      created_at: null,
       is_active: null,
     },
     campo: {},
     error: {},
     enviado: false,
-  }
-
-  validarFormulario() {
-    // name email password role is_active
-    //let campo = this.state.campo;
-    let campo = this.state.form
-    let error = {}
-    let formularioValido = true
-
-    // Nombre
-    if (!campo["name"]) {
-      formularioValido = false
-      error["name"] = "Por favor, ingresa un nombre"
-    }
-
-    // Password
-    if (!campo["password"]) {
-      formularioValido = false
-      error["password"] = "Por favor, ingresa una contraseña"
-    }
-
-    // Email
-    if (!campo["email"]) {
-      formularioValido = false
-      error["email"] = "Por favor, ingresa un correo válido"
-    }
-
-    // Validamos si el formato del Email es correcto
-    if (typeof campo["email"] !== "undefined") {
-      let posicionArroba = campo["email"].lastIndexOf("@")
-      let posicionPunto = campo["email"].lastIndexOf(".")
-
-      if (
-        !(
-          posicionArroba < posicionPunto &&
-          posicionArroba > 0 &&
-          campo["email"].indexOf("@@") == -1 &&
-          posicionPunto > 2 &&
-          campo["email"].length - posicionPunto > 2
-        )
-      ) {
-        formularioValido = false
-        error["email"] = "Por favor, ingresa un correo válido."
-      }
-    }
-
-    // Rol
-    if (!campo["role"]) {
-      formularioValido = false
-      error["role"] = "Por favor, selecciona un rol"
-    }
-
-    // Estado | is_active
-    if (!campo["is_active"]) {
-      formularioValido = false
-      error["is_active"] = "Por favor, selecciona un estado"
-    }
-
-    // Seteo el estado de error
-    this.setState({
-      error: error,
-    })
-
-    return formularioValido
-  }
-
-  enviarFormulario(/*e*/) {
-    //e.preventDefault();
-
-    // Si la validación de los campos del formulario ha sido realizada
-    if (this.validarFormulario()) {
-      // Cambio el estado de 'enviado' a 'true'
-      //this.setState({
-      //    enviado: true
-      //});
-
-      // Muestro el mensaje que se encuentra en la función mensajeEnviado()
-      //return this.mensajeEnviado();
-      console.log("Todo parece estar correcto")
-    } else {
-      console.log("Parece que hay error en el formulario")
-    }
+    style: {
+      maxWidth: "300px",
+      whiteSpace: "nowrap",
+      overflow: "hidden",
+      textOverflow: "ellipsis",
+      verticalAlign: "middle",
+    },
   }
 
   peticionGet = () => {
     axios
-      .get("https://api-www-5c6w.onrender.com/api/users/")
+      .get("https://api-www-5c6w.onrender.com/api/products/")
       .then(response => {
         this.setState({ data: response.data })
       })
@@ -131,75 +59,60 @@ class TablaUsuarios extends Component {
 
   peticionPost = async () => {
     //this.enviarFormulario()
-    if (this.validarFormulario()) {
-      if (this.validarEmailBD(this.state.form.email)) {
-        await axios
-          .post("https://api-www-5c6w.onrender.com/api/users/", this.state.form)
-          .then(response => {
-            this.registroAuth0({
-              nombre: this.state.form.name,
-              email: this.state.form.email,
-              password: this.state.form.password,
-            })
-            this.modalInsertar()
-            this.peticionGet()
-          })
-          .catch(error => {
-            console.log("error.message: ", error.message)
-            console.log("error", error)
-          })
-      } else {
-        window.alert("Ese correo ya se encuentra en la base de datos")
-      }
+    const body = {
+      name: this.state.form.name,
+      price: this.state.form.price,
+      url_image: this.state.form.url_image,
+      url_origin: this.state.form.url_origin,
+      vendor_address: this.state.form.vendor_address,
+      is_active: this.state.form.is_active,
     }
-  }
-
-  validarEmailBD = unEmail => {
-    var salida = true
-    this.state.data.map(usuario => {
-      //console.log('Correos en BD: ', usuario.email)
-      if (usuario.email === unEmail) {
-        //console.log('Entró')
-        salida = false
-      }
-    })
-    //console.log('No entró')
-    return salida
+    await axios
+      .post("https://api-www-5c6w.onrender.com/api/products/", body)
+      .then(response => {
+        console.log(response)
+        this.modalInsertar()
+        this.peticionGet()
+      })
+      .catch(error => {
+        console.log("error.message: ", error.message)
+        console.log("error", error)
+      })
   }
 
   peticionPut = async () => {
-    if (this.validarFormulario()) {
-      console.log("this.state.form: ", this.state.form)
-      await axios
-        .put(
-          "https://api-www-5c6w.onrender.com/api/users/" +
-            this.state.form.email +
-            "/",
-          this.state.form
-        )
-        .then(response => {
-          this.modalEditar()
-          this.peticionGet()
-        })
-        .catch(error => {
-          console.log(error.message)
-        })
-    }
+    console.log("this.state.form: ", this.state.form)
+    await axios
+      .put(
+        "https://api-www-5c6w.onrender.com/api/products/" +
+          this.state.form.id +
+          "/",
+        this.state.form
+      )
+      .then(response => {
+        this.modalEditar()
+        this.peticionGet()
+      })
+      .catch(error => {
+        console.log(error.message)
+      })
   }
 
   peticionBloquear = async () => {
     const estaActivo = this.state.form.is_active ? false : true
     const body = {
       name: this.state.form.name,
-      email: this.state.form.email,
-      password: this.state.form.password,
-      role: this.state.form.role,
+      price: this.state.form.price,
+      url_image: this.state.form.url_image,
+      url_origin: this.state.form.url_origin,
+      vendor_address: this.state.form.vendor_address,
+      created_at: this.state.form.created_at,
       is_active: estaActivo,
     }
     await axios
       .put(
-        "https://api-www-5c6w.onrender.com/api/users/" +
-          this.state.form.email +
+        "https://api-www-5c6w.onrender.com/api/products/" +
+          this.state.form.id +
           "/",
         body
       )
@@ -230,28 +143,34 @@ class TablaUsuarios extends Component {
     this.setState({ modalInsertar: !this.state.modalInsertar })
     this.setState({
       form: {
+        id: "",
         name: "",
-        email: "",
-        password: "",
-        role: null,
+        price: "",
+        url_image: "",
+        url_origin: "",
+        vendor_address: "",
+        created_at: null,
         is_active: null,
       },
       error: {},
     })
   }
+
   modalEditar = () => {
-    // Cambio de estado de campo
     this.setState({ modalEditar: !this.state.modalEditar, error: {} })
   }
 
-  seleccionarUsuario = usuario => {
+  seleccionarProducto = producto => {
     this.setState({
       form: {
-        name: usuario.name,
-        email: usuario.email,
-        password: usuario.password,
-        role: usuario.role,
-        is_active: usuario.is_active,
+        id: producto.id,
+        name: producto.name,
+        price: producto.price,
+        url_image: producto.url_image,
+        url_origin: producto.url_origin,
+        vendor_address: producto.vendor_address,
+        created_at: producto.created_at,
+        is_active: producto.is_active,
       },
     })
   }
@@ -276,31 +195,19 @@ class TablaUsuarios extends Component {
     this.peticionGet()
   }
 
-  devolverRol(rol) {
-    if (rol === "administrator") {
-      return "Administrador"
-    }
-    if (rol === "client") {
-      return "Cliente"
-    }
-    if (rol === "assistant") {
-      return "Asistente"
-    }
-  }
-
   render() {
     const { form } = this.state
     //this.registroAuth0()
     //this.validarEmailBD()
 
     return (
-      <div className="TablaUsuarios">
+      <div className="TablaProductos">
         <br />
         <button
           className="btn btn-success"
           onClick={() => this.modalInsertar()}
         >
-          Agregar usuario
+          Agregar Producto
         </button>
         <br />
         <br />
@@ -309,38 +216,43 @@ class TablaUsuarios extends Component {
             <thead>
               <tr>
                 <th>Nombre</th>
-                <th>Correo</th>
-                <th>Rol</th>
-                <th>Estado</th>
-                <th>Acciones</th>
+                <th style={{ paddingLeft: "150px" }}>Precio</th>
+                <th style={{ paddingLeft: "150px" }}>Imagen</th>
+                <th style={{ paddingLeft: "270px" }}>Url</th>
+                <th style={{ paddingLeft: "250px" }}>Direccion</th>
+                <th style={{ paddingLeft: "200px" }}>Fecha</th>
+                <th style={{ paddingLeft: "150px" }}>Estado</th>
+                <th style={{ paddingLeft: "50px" }}>Acciones</th>
               </tr>
             </thead>
             <tbody>
-              {this.state.data.map(usuario => {
+              {this.state.data.map(producto => {
                 return (
                   <tr>
-                    <td>{usuario.name}</td>
-                    <td>{usuario.email}</td>
-                    {/*<td>{usuario.role}</td>*/}
-                    <td>{this.devolverRol(usuario.role)}</td>
-                    <td>{usuario.is_active ? "Activo" : "Inactivo"}</td>
+                    <td style={this.state.style}>{producto.name}</td>
+                    <td>{producto.price}</td>
+                    <td style={this.state.style}>{producto.url_image}</td>
+                    <td style={this.state.style}>{producto.url_origin}</td>
+                    <td style={this.state.style}>{producto.vendor_address}</td>
+                    <td style={this.state.style}>{producto.created_at}</td>
+                    <td>{producto.is_active ? "Activo" : "Inactivo"}</td>
                     <td>
                       <button
                         className="btn btn-primary"
                         onClick={() => {
-                          this.seleccionarUsuario(usuario)
+                          this.seleccionarProducto(producto)
                           this.modalEditar()
                         }}
                       >
                         <FontAwesomeIcon icon={faEdit} />
                       </button>
                       {"  "}
-                      {usuario.is_active ? (
+                      {producto.is_active ? (
                         <button
                           className="btn btn-danger"
                           title="Cambiar estado"
                           onClick={() => {
-                            this.seleccionarUsuario(usuario)
+                            this.seleccionarProducto(producto)
                             this.setState({ modalBloquear: true })
                           }}
                         >
@@ -351,7 +263,7 @@ class TablaUsuarios extends Component {
                           className="btn btn-success"
                           title="Cambiar estado"
                           onClick={() => {
-                            this.seleccionarUsuario(usuario)
+                            this.seleccionarProducto(producto)
                             this.setState({ modalBloquear: true })
                           }}
                         >
@@ -366,11 +278,11 @@ class TablaUsuarios extends Component {
           </table>
         </div>
 
-        {/* Modal Insertar Usuario */}
+        {/* Modal Insertar Producto */}
         <Modal isOpen={this.state.modalInsertar}>
           <ModalHeader style={{ display: "block" }}>
             <span style={{ float: "left" }}>
-              Ingrese los datos del nuevo usuario
+              Ingrese los datos del nuevo Producto
             </span>
           </ModalHeader>
           <ModalBody>
@@ -383,78 +295,83 @@ class TablaUsuarios extends Component {
                 id="name"
                 onChange={this.handleChange}
                 value={form.name}
+                required
               />
               <span style={{ color: "red" }}>{this.state.error["name"]}</span>
               <br />
               <br />
-              <label htmlFor="email">Correo</label>
-              <input
-                className="form-control"
-                type="email"
-                name="email"
-                id="email"
-                onChange={this.handleChange}
-                value={form.email}
-                pattern="[a-zA-Z0-9!#$%&'*_+-]([\.]?[a-zA-Z0-9!#$%&'*_+-])+@[a-zA-Z0-9]([^@&%$\/()=?¿!.,:;]|\d)+[a-zA-Z0-9][\.][a-zA-Z]{2,4}([\.][a-zA-Z]{2})?"
-              />
-              <small id="emailHelp" className="form-text text-muted">
-                Ejemplo: correo@email.com{" "}
-              </small>
-              <span style={{ color: "red" }}>{this.state.error["email"]}</span>
-              <br />
-              <br />
-              <label htmlFor="password">Password</label>
+              <label htmlFor="price">Precio</label>
               <input
                 className="form-control"
                 type="text"
-                name="password"
-                id="password"
+                name="name"
+                id="name"
+                placeholder="$1.500.000"
                 onChange={this.handleChange}
-                value={form.password}
+                value={form.price}
+                required
+              />
+              <span style={{ color: "red" }}>{this.state.error["price"]}</span>
+              <br />
+              <br />
+              <label htmlFor="url_image">Imagen</label>
+              <input
+                className="form-control"
+                type="url"
+                name="url_image"
+                id="url_image"
+                placeholder="https://example.com"
+                pattern="https://.*"
+                size="30"
+                onChange={this.handleChange}
+                value={form.url_image}
+                required
               />
               <span style={{ color: "red" }}>
-                {this.state.error["password"]}
+                {this.state.error["url_image"]}
               </span>
               <br />
               <br />
-              {/*}
-            <label htmlFor="role">Rol</label>
-            <input className="form-control" type="text" name="role"id="role"  onChange={this.handleChange} value={form.role}/>
-            <br />
-            */}
-              <label htmlFor="role">Seleccionar rol:&nbsp;&nbsp;</label>
-
-              <select
-                name="role"
+              <label htmlFor="url_origin">Url</label>
+              <input
+                className="form-control"
+                type="url"
+                placeholder="https://example.com"
+                pattern="https://.*"
+                size="30"
+                name="url_origin"
+                id="url_origin"
+                required
                 onChange={this.handleChange}
-                value={form.role}
-              >
-                <option value="" selected>
-                  Selecciona una opción
-                </option>
-                <option value="administrator">Administrador</option>
-                <option value="client">Cliente</option>
-                <option value="assistant">Asistente</option>
-                {/* <option value="value2" selected>Value 2</option> */}
-              </select>
-              <br />
-              <span style={{ color: "red" }}>{this.state.error["role"]}</span>
+                value={form.url_origin}
+              />
+              <span style={{ color: "red" }}>
+                {this.state.error["url_media"]}
+              </span>
               <br />
               <br />
-              {/*
-            <label htmlFor="is_active">Estado</label>
-            <input className="form-control" type="bool" name="is_active"id="is_active" onChange={this.handleChange} value={form.is_active}/>
-            */}
-              {/*
-            <label htmlFor="is_active">Seleccionar estado:&nbsp;&nbsp;</label>
-            <input type="checkbox" id="is_active" name="is_active" onChange={this.handleChange} value={ form.is_active }/>
-          */}
+              <label htmlFor="vendor_address">Direccion</label>
+              <input
+                className="form-control"
+                type="text"
+                name="vendor_address"
+                id="venddor_address"
+                onChange={this.handleChange}
+                value={form.vendor_address}
+                required
+              />
+              <span style={{ color: "red" }}>
+                {this.state.error["vendor_address"]}
+              </span>
+              <br />
+              <br />
               <label htmlFor="is_active">Seleccionar estado:&nbsp;&nbsp;</label>
 
               <select
                 name="is_active"
                 onChange={this.handleChange}
                 value={form.is_active}
+                required
               >
                 <option value="" selected>
                   Selecciona una opción
@@ -486,7 +403,7 @@ class TablaUsuarios extends Component {
           </ModalFooter>
         </Modal>
 
-        {/* Modal Editar Usuario */}
+        {/* Modal Editar Producto */}
         <Modal isOpen={this.state.modalEditar}>
           <ModalHeader style={{ display: "block" }}>
             <span style={{ float: "left" }}>
@@ -503,48 +420,99 @@ class TablaUsuarios extends Component {
                 id="name"
                 onChange={this.handleChange}
                 value={form.name}
+                required
               />
               <span style={{ color: "red" }}>{this.state.error["name"]}</span>
               <br />
               <br />
-              {/*
-            <label htmlFor="email">Correo</label>
-            <input className="form-control" type="email" name="email"id="email" readOnly onChange={this.handleChange} value={form.email}/>
-            <br />
-            */}
-              <label htmlFor="role">Seleccionar rol:&nbsp;&nbsp;</label>
-
-              <select
-                name="role"
+              <label htmlFor="price">Precio</label>
+              <input
+                className="form-control"
+                type="text"
+                name="name"
+                id="name"
+                placeholder="$1.500.000"
                 onChange={this.handleChange}
-                value={form.role}
-              >
-                <option value="" selected>
-                  Selecciona una opción
-                </option>
-                <option value="administrator">Administrador</option>
-                <option value="client">Cliente</option>
-                <option value="assistant">Asistente</option>
-                {/* <option value="value2" selected>Value 2</option> */}
-              </select>
-              <br />
-              <span style={{ color: "red" }}>{this.state.error["role"]}</span>
+                value={form.price}
+                required
+              />
+              <span style={{ color: "red" }}>{this.state.error["price"]}</span>
               <br />
               <br />
-              {/*
-            <label htmlFor="is_active">Estado</label>
-            <input className="form-control" type="bool" name="is_active"id="is_active" onChange={this.handleChange} value={form.is_active}/>
-            */}
-              {/*
-            <label htmlFor="is_active">Seleccionar estado:&nbsp;&nbsp;</label>
-            <input type="checkbox" id="is_active" name="is_active" onChange={this.handleChange} value={ form.is_active }/>
-          */}
+              <label htmlFor="url_image">Imagen</label>
+              <input
+                className="form-control"
+                type="url"
+                name="url_image"
+                id="url_image"
+                placeholder="https://example.com"
+                pattern="https://.*"
+                size="30"
+                onChange={this.handleChange}
+                value={form.url_image}
+                required
+              />
+              <span style={{ color: "red" }}>
+                {this.state.error["url_image"]}
+              </span>
+              <br />
+              <br />
+              <label htmlFor="url_origin">Url</label>
+              <input
+                className="form-control"
+                type="url"
+                placeholder="https://example.com"
+                pattern="https://.*"
+                size="30"
+                name="url_origin"
+                id="url_origin"
+                required
+                onChange={this.handleChange}
+                value={form.url_origin}
+              />
+              <span style={{ color: "red" }}>
+                {this.state.error["url_media"]}
+              </span>
+              <br />
+              <br />
+              <label htmlFor="vendor_address">Direccion</label>
+              <input
+                className="form-control"
+                type="text"
+                name="vendor_address"
+                id="venddor_address"
+                onChange={this.handleChange}
+                value={form.vendor_address}
+                required
+              />
+              <span style={{ color: "red" }}>
+                {this.state.error["vendor_address"]}
+              </span>
+              <br />
+              <br />
+              <label htmlFor="name">Fecha</label>
+              <input
+                className="form-control"
+                type="text"
+                name="created_at"
+                id="created_at"
+                readOnly
+                onChange={this.handleChange}
+                value={form.created_at}
+                required
+              />
+              <span style={{ color: "red" }}>
+                {this.state.error["created_at"]}
+              </span>
+              <br />
+              <br />
               <label htmlFor="is_active">Seleccionar estado:&nbsp;&nbsp;</label>
 
               <select
                 name="is_active"
                 onChange={this.handleChange}
                 value={form.is_active}
+                required
               >
                 <option value="" selected>
                   Selecciona una opción
@@ -576,12 +544,11 @@ class TablaUsuarios extends Component {
           </ModalFooter>
         </Modal>
 
-        {/* Modal Bloquear Usuario */}
+        {/* Modal Desactivar Producto */}
         <Modal isOpen={this.state.modalBloquear}>
           <ModalBody>
-            ¿Estás seguro que deseas{" "}
-            {form.is_active ? "bloquear" : "desbloquear"} al usuario{" "}
-            {form && form.name}?
+            ¿Estás seguro que deseas {form.is_active ? "desactivar" : "activar"}{" "}
+            el Producto "{form && form.title}" ?
           </ModalBody>
           <ModalFooter>
             <button
@@ -602,4 +569,5 @@ class TablaUsuarios extends Component {
     )
   }
 }
-export default TablaUsuarios
+
+export default TablaProductos

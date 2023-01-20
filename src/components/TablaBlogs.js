@@ -18,109 +18,34 @@ import axios from "axios"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import "../styles/estilos.css"
 
-class TablaUsuarios extends Component {
+class TablaBlogs extends Component {
   state = {
     data: [],
     modalInsertar: false,
     modalEditar: false,
     modalBloquear: false,
     form: {
-      name: "",
-      email: "",
-      password: "",
-      role: null,
+      id: "",
+      title: "",
+      description: "",
+      url_media: "",
       is_active: null,
     },
     campo: {},
     error: {},
     enviado: false,
-  }
-
-  validarFormulario() {
-    // name email password role is_active
-    //let campo = this.state.campo;
-    let campo = this.state.form
-    let error = {}
-    let formularioValido = true
-
-    // Nombre
-    if (!campo["name"]) {
-      formularioValido = false
-      error["name"] = "Por favor, ingresa un nombre"
-    }
-
-    // Password
-    if (!campo["password"]) {
-      formularioValido = false
-      error["password"] = "Por favor, ingresa una contraseña"
-    }
-
-    // Email
-    if (!campo["email"]) {
-      formularioValido = false
-      error["email"] = "Por favor, ingresa un correo válido"
-    }
-
-    // Validamos si el formato del Email es correcto
-    if (typeof campo["email"] !== "undefined") {
-      let posicionArroba = campo["email"].lastIndexOf("@")
-      let posicionPunto = campo["email"].lastIndexOf(".")
-
-      if (
-        !(
-          posicionArroba < posicionPunto &&
-          posicionArroba > 0 &&
-          campo["email"].indexOf("@@") == -1 &&
-          posicionPunto > 2 &&
-          campo["email"].length - posicionPunto > 2
-        )
-      ) {
-        formularioValido = false
-        error["email"] = "Por favor, ingresa un correo válido."
-      }
-    }
-
-    // Rol
-    if (!campo["role"]) {
-      formularioValido = false
-      error["role"] = "Por favor, selecciona un rol"
-    }
-
-    // Estado | is_active
-    if (!campo["is_active"]) {
-      formularioValido = false
-      error["is_active"] = "Por favor, selecciona un estado"
-    }
-
-    // Seteo el estado de error
-    this.setState({
-      error: error,
-    })
-
-    return formularioValido
-  }
-
-  enviarFormulario(/*e*/) {
-    //e.preventDefault();
-
-    // Si la validación de los campos del formulario ha sido realizada
-    if (this.validarFormulario()) {
-      // Cambio el estado de 'enviado' a 'true'
-      //this.setState({
-      //    enviado: true
-      //});
-
-      // Muestro el mensaje que se encuentra en la función mensajeEnviado()
-      //return this.mensajeEnviado();
-      console.log("Todo parece estar correcto")
-    } else {
-      console.log("Parece que hay error en el formulario")
-    }
+    style: {
+      maxWidth: "500px",
+      maxHeight: "40px",
+      whiteSpace: "nowrap",
+      overflow: "hidden",
+      textOverflow: "ellipsis",
+    },
   }
 
   peticionGet = () => {
     axios
-      .get("https://api-www-5c6w.onrender.com/api/users/")
+      .get("https://api-www-5c6w.onrender.com/api/posts/")
       .then(response => {
         this.setState({ data: response.data })
       })
@@ -131,75 +56,49 @@ class TablaUsuarios extends Component {
 
   peticionPost = async () => {
     //this.enviarFormulario()
-    if (this.validarFormulario()) {
-      if (this.validarEmailBD(this.state.form.email)) {
-        await axios
-          .post("https://api-www-5c6w.onrender.com/api/users/", this.state.form)
-          .then(response => {
-            this.registroAuth0({
-              nombre: this.state.form.name,
-              email: this.state.form.email,
-              password: this.state.form.password,
-            })
-            this.modalInsertar()
-            this.peticionGet()
-          })
-          .catch(error => {
-            console.log("error.message: ", error.message)
-            console.log("error", error)
-          })
-      } else {
-        window.alert("Ese correo ya se encuentra en la base de datos")
-      }
-    }
-  }
-
-  validarEmailBD = unEmail => {
-    var salida = true
-    this.state.data.map(usuario => {
-      //console.log('Correos en BD: ', usuario.email)
-      if (usuario.email === unEmail) {
-        //console.log('Entró')
-        salida = false
-      }
-    })
-    //console.log('No entró')
-    return salida
+    await axios
+      .post("https://api-www-5c6w.onrender.com/api/posts/", this.state.form)
+      .then(response => {
+        console.log(response)
+        this.modalInsertar()
+        this.peticionGet()
+      })
+      .catch(error => {
+        console.log("error.message: ", error.message)
+        console.log("error", error)
+      })
   }
 
   peticionPut = async () => {
-    if (this.validarFormulario()) {
-      console.log("this.state.form: ", this.state.form)
-      await axios
-        .put(
-          "https://api-www-5c6w.onrender.com/api/users/" +
-            this.state.form.email +
-            "/",
-          this.state.form
-        )
-        .then(response => {
-          this.modalEditar()
-          this.peticionGet()
-        })
-        .catch(error => {
-          console.log(error.message)
-        })
-    }
+    console.log("this.state.form: ", this.state.form)
+    await axios
+      .put(
+        "https://api-www-5c6w.onrender.com/api/posts/" +
+          this.state.form.id +
+          "/",
+        this.state.form
+      )
+      .then(response => {
+        this.modalEditar()
+        this.peticionGet()
+      })
+      .catch(error => {
+        console.log(error.message)
+      })
   }
 
   peticionBloquear = async () => {
     const estaActivo = this.state.form.is_active ? false : true
     const body = {
-      name: this.state.form.name,
-      email: this.state.form.email,
-      password: this.state.form.password,
-      role: this.state.form.role,
+      title: this.state.form.title,
+      description: this.state.form.description,
+      url_media: this.state.form.url_media,
       is_active: estaActivo,
     }
     await axios
       .put(
-        "https://api-www-5c6w.onrender.com/api/users/" +
-          this.state.form.email +
+        "https://api-www-5c6w.onrender.com/api/posts/" +
+          this.state.form.id +
           "/",
         body
       )
@@ -230,28 +129,28 @@ class TablaUsuarios extends Component {
     this.setState({ modalInsertar: !this.state.modalInsertar })
     this.setState({
       form: {
-        name: "",
-        email: "",
-        password: "",
-        role: null,
+        id: "",
+        title: "",
+        description: "",
+        url_media: "",
         is_active: null,
       },
       error: {},
     })
   }
+
   modalEditar = () => {
-    // Cambio de estado de campo
     this.setState({ modalEditar: !this.state.modalEditar, error: {} })
   }
 
-  seleccionarUsuario = usuario => {
+  seleccionarBlog = blog => {
     this.setState({
       form: {
-        name: usuario.name,
-        email: usuario.email,
-        password: usuario.password,
-        role: usuario.role,
-        is_active: usuario.is_active,
+        id: blog.id,
+        title: blog.title,
+        description: blog.description,
+        url_media: blog.url_media,
+        is_active: blog.is_active,
       },
     })
   }
@@ -294,13 +193,13 @@ class TablaUsuarios extends Component {
     //this.validarEmailBD()
 
     return (
-      <div className="TablaUsuarios">
+      <div className="TablaBlogs">
         <br />
         <button
           className="btn btn-success"
           onClick={() => this.modalInsertar()}
         >
-          Agregar usuario
+          Agregar Post
         </button>
         <br />
         <br />
@@ -308,39 +207,39 @@ class TablaUsuarios extends Component {
           <table class="scrolldown">
             <thead>
               <tr>
-                <th>Nombre</th>
-                <th>Correo</th>
-                <th>Rol</th>
+                <th>Titulo</th>
+                <th>Descripcion</th>
+                <th>Url</th>
                 <th>Estado</th>
                 <th>Acciones</th>
               </tr>
             </thead>
             <tbody>
-              {this.state.data.map(usuario => {
+              {this.state.data.map(post => {
                 return (
                   <tr>
-                    <td>{usuario.name}</td>
-                    <td>{usuario.email}</td>
-                    {/*<td>{usuario.role}</td>*/}
-                    <td>{this.devolverRol(usuario.role)}</td>
-                    <td>{usuario.is_active ? "Activo" : "Inactivo"}</td>
+                    <td>{post.title}</td>
+                    <td style={this.state.style}>{post.description}</td>
+                    <td style={this.state.style}>{post.url_media}</td>
+                    {/* <td>{this.devolverRol(post.role)}</td> */}
+                    <td>{post.is_active ? "Activo" : "Inactivo"}</td>
                     <td>
                       <button
                         className="btn btn-primary"
                         onClick={() => {
-                          this.seleccionarUsuario(usuario)
+                          this.seleccionarBlog(post)
                           this.modalEditar()
                         }}
                       >
                         <FontAwesomeIcon icon={faEdit} />
                       </button>
                       {"  "}
-                      {usuario.is_active ? (
+                      {post.is_active ? (
                         <button
                           className="btn btn-danger"
                           title="Cambiar estado"
                           onClick={() => {
-                            this.seleccionarUsuario(usuario)
+                            this.seleccionarBlog(post)
                             this.setState({ modalBloquear: true })
                           }}
                         >
@@ -351,7 +250,7 @@ class TablaUsuarios extends Component {
                           className="btn btn-success"
                           title="Cambiar estado"
                           onClick={() => {
-                            this.seleccionarUsuario(usuario)
+                            this.seleccionarBlog(post)
                             this.setState({ modalBloquear: true })
                           }}
                         >
@@ -366,54 +265,58 @@ class TablaUsuarios extends Component {
           </table>
         </div>
 
-        {/* Modal Insertar Usuario */}
+        {/* Modal Insertar Post */}
         <Modal isOpen={this.state.modalInsertar}>
           <ModalHeader style={{ display: "block" }}>
             <span style={{ float: "left" }}>
-              Ingrese los datos del nuevo usuario
+              Ingrese los datos del nuevo Post
             </span>
           </ModalHeader>
           <ModalBody>
             <div className="form-group">
-              <label htmlFor="name">Nombre</label>
+              <label htmlFor="title">Titulo</label>
               <input
                 className="form-control"
                 type="text"
-                name="name"
-                id="name"
+                name="title"
+                id="title"
                 onChange={this.handleChange}
-                value={form.name}
+                value={form.title}
+                required
               />
-              <span style={{ color: "red" }}>{this.state.error["name"]}</span>
+              <span style={{ color: "red" }}>{this.state.error["title"]}</span>
               <br />
               <br />
-              <label htmlFor="email">Correo</label>
-              <input
-                className="form-control"
-                type="email"
-                name="email"
-                id="email"
-                onChange={this.handleChange}
-                value={form.email}
-                pattern="[a-zA-Z0-9!#$%&'*_+-]([\.]?[a-zA-Z0-9!#$%&'*_+-])+@[a-zA-Z0-9]([^@&%$\/()=?¿!.,:;]|\d)+[a-zA-Z0-9][\.][a-zA-Z]{2,4}([\.][a-zA-Z]{2})?"
-              />
-              <small id="emailHelp" className="form-text text-muted">
-                Ejemplo: correo@email.com{" "}
-              </small>
-              <span style={{ color: "red" }}>{this.state.error["email"]}</span>
-              <br />
-              <br />
-              <label htmlFor="password">Password</label>
+              <label htmlFor="description">Descripcion</label>
               <input
                 className="form-control"
                 type="text"
-                name="password"
-                id="password"
+                name="description"
+                id="description"
                 onChange={this.handleChange}
-                value={form.password}
+                value={form.description}
+                required
               />
               <span style={{ color: "red" }}>
-                {this.state.error["password"]}
+                {this.state.error["description"]}
+              </span>
+              <br />
+              <br />
+              <label htmlFor="url_media">Url</label>
+              <input
+                className="form-control"
+                type="url"
+                placeholder="https://example.com"
+                pattern="https://.*"
+                size="30"
+                name="url_media"
+                id="url_media"
+                required
+                onChange={this.handleChange}
+                value={form.url_media}
+              />
+              <span style={{ color: "red" }}>
+                {this.state.error["url_media"]}
               </span>
               <br />
               <br />
@@ -422,25 +325,6 @@ class TablaUsuarios extends Component {
             <input className="form-control" type="text" name="role"id="role"  onChange={this.handleChange} value={form.role}/>
             <br />
             */}
-              <label htmlFor="role">Seleccionar rol:&nbsp;&nbsp;</label>
-
-              <select
-                name="role"
-                onChange={this.handleChange}
-                value={form.role}
-              >
-                <option value="" selected>
-                  Selecciona una opción
-                </option>
-                <option value="administrator">Administrador</option>
-                <option value="client">Cliente</option>
-                <option value="assistant">Asistente</option>
-                {/* <option value="value2" selected>Value 2</option> */}
-              </select>
-              <br />
-              <span style={{ color: "red" }}>{this.state.error["role"]}</span>
-              <br />
-              <br />
               {/*
             <label htmlFor="is_active">Estado</label>
             <input className="form-control" type="bool" name="is_active"id="is_active" onChange={this.handleChange} value={form.is_active}/>
@@ -455,6 +339,7 @@ class TablaUsuarios extends Component {
                 name="is_active"
                 onChange={this.handleChange}
                 value={form.is_active}
+                required
               >
                 <option value="" selected>
                   Selecciona una opción
@@ -486,7 +371,7 @@ class TablaUsuarios extends Component {
           </ModalFooter>
         </Modal>
 
-        {/* Modal Editar Usuario */}
+        {/* Modal Editar Post */}
         <Modal isOpen={this.state.modalEditar}>
           <ModalHeader style={{ display: "block" }}>
             <span style={{ float: "left" }}>
@@ -495,42 +380,57 @@ class TablaUsuarios extends Component {
           </ModalHeader>
           <ModalBody>
             <div className="form-group">
-              <label htmlFor="name">Nombre</label>
+              <label htmlFor="title">Titulo</label>
               <input
                 className="form-control"
                 type="text"
-                name="name"
-                id="name"
+                name="title"
+                id="title"
                 onChange={this.handleChange}
-                value={form.name}
+                value={form.title}
+                required
               />
-              <span style={{ color: "red" }}>{this.state.error["name"]}</span>
+              <span style={{ color: "red" }}>{this.state.error["title"]}</span>
               <br />
               <br />
-              {/*
-            <label htmlFor="email">Correo</label>
-            <input className="form-control" type="email" name="email"id="email" readOnly onChange={this.handleChange} value={form.email}/>
+              <label htmlFor="description">Descripcion</label>
+              <input
+                className="form-control"
+                type="text"
+                name="description"
+                id="description"
+                onChange={this.handleChange}
+                value={form.description}
+                required
+              />
+              <span style={{ color: "red" }}>
+                {this.state.error["description"]}
+              </span>
+              <br />
+              <br />
+              <label htmlFor="url_media">Url</label>
+              <input
+                className="form-control"
+                type="url"
+                placeholder="https://example.com"
+                pattern="https://.*"
+                size="30"
+                name="url_media"
+                id="url_media"
+                required
+                onChange={this.handleChange}
+                value={form.url_media}
+              />
+              <span style={{ color: "red" }}>
+                {this.state.error["url_media"]}
+              </span>
+              <br />
+              <br />
+              {/*}
+            <label htmlFor="role">Rol</label>
+            <input className="form-control" type="text" name="role"id="role"  onChange={this.handleChange} value={form.role}/>
             <br />
             */}
-              <label htmlFor="role">Seleccionar rol:&nbsp;&nbsp;</label>
-
-              <select
-                name="role"
-                onChange={this.handleChange}
-                value={form.role}
-              >
-                <option value="" selected>
-                  Selecciona una opción
-                </option>
-                <option value="administrator">Administrador</option>
-                <option value="client">Cliente</option>
-                <option value="assistant">Asistente</option>
-                {/* <option value="value2" selected>Value 2</option> */}
-              </select>
-              <br />
-              <span style={{ color: "red" }}>{this.state.error["role"]}</span>
-              <br />
-              <br />
               {/*
             <label htmlFor="is_active">Estado</label>
             <input className="form-control" type="bool" name="is_active"id="is_active" onChange={this.handleChange} value={form.is_active}/>
@@ -545,6 +445,7 @@ class TablaUsuarios extends Component {
                 name="is_active"
                 onChange={this.handleChange}
                 value={form.is_active}
+                required
               >
                 <option value="" selected>
                   Selecciona una opción
@@ -576,12 +477,11 @@ class TablaUsuarios extends Component {
           </ModalFooter>
         </Modal>
 
-        {/* Modal Bloquear Usuario */}
+        {/* Modal Desactivar Post */}
         <Modal isOpen={this.state.modalBloquear}>
           <ModalBody>
-            ¿Estás seguro que deseas{" "}
-            {form.is_active ? "bloquear" : "desbloquear"} al usuario{" "}
-            {form && form.name}?
+            ¿Estás seguro que deseas {form.is_active ? "desactivar" : "activar"}{" "}
+            el Post "{form && form.title}" ?
           </ModalBody>
           <ModalFooter>
             <button
@@ -602,4 +502,5 @@ class TablaUsuarios extends Component {
     )
   }
 }
-export default TablaUsuarios
+
+export default TablaBlogs

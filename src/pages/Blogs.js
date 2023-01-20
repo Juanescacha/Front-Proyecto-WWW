@@ -10,7 +10,7 @@ import { Spinner } from "react-bootstrap"
 
 import "bootstrap/dist/css/bootstrap.min.css"
 
-import TablaBlogs from "components/TablaProductos"
+import TablaBlogs from "components/TablaBlogs"
 import HeaderLight from "components/headers/light"
 
 const Blogs = () => {
@@ -25,7 +25,7 @@ const Blogs = () => {
     <AnimationRevealPage>
       <HeaderLight />
       <p></p>
-      <h2>Realice las operaciones con productos sobre la tabla</h2>
+      <h2>Realice las operaciones con blogs sobre la tabla</h2>
       <TablaBlogs />
     </AnimationRevealPage>
   )

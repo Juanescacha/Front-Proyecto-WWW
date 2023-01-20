@@ -7,7 +7,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
 
 import LoginPage from "pages/Login"
 import SignUp from "pages/SignUp"
-import BlogIndexPage from "pages/BlogIndex"
+import Blogs from "pages/Blogs"
 import LandingPage from "pages/LandingPage"
 import Usuarios from "pages/Usuarios"
 import Reportes from "pages/Reportes"
@@ -26,7 +26,7 @@ const App = () => {
           <Route path="/usuarios" element={<Usuarios />} />
           <Route path="/reportes" element={<Reportes />} />
           <Route path="/productos" element={<Productos />} />
-          <Route path="/blogs" element={<BlogIndexPage />} />
+          <Route path="/blogs" element={<Blogs />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>
