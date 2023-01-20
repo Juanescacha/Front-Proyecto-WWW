@@ -89,22 +89,20 @@ const TabCardGrid = ({ heading = "Checkout the Menu" }) => {
     let productos = []
 
     for (var i = 0; i < arreglo.length; i++) {
-      if (i === 0) {
-        console.log(arreglo[i].price)
-        console.log(typeof arreglo[i].price)
-      }
       const rate = Math.round(Math.random() * 2 + 3)
       const review = Math.round(Math.random() * 100)
 
-      productos.push({
-        imageSrc: arreglo[i].url_image,
-        title: arreglo[i].name,
-        content: arreglo[i].vendor_address,
-        price: handlePrecios(arreglo[i].price),
-        rating: rate.toString(),
-        reviews: review.toString(),
-        url: arreglo[i].url_origin,
-      })
+      if (arreglo[i].is_active) {
+        productos.push({
+          imageSrc: arreglo[i].url_image,
+          title: arreglo[i].name,
+          content: arreglo[i].vendor_address,
+          price: handlePrecios(arreglo[i].price),
+          rating: rate.toString(),
+          reviews: review.toString(),
+          url: arreglo[i].url_origin,
+        })
+      }
     }
 
     return {

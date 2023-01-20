@@ -145,10 +145,8 @@ const HeaderLight = ({
   const defaultLinks = [
     <NavLinks key={1}>
       {/*<Profile />*/}
-      <NavLink href="/blogs">Blogs</NavLink>
       {rol === "client" ? (
         <>
-          <NavLink href="/productos">Productos</NavLink>
           <NavLink href="/">Landing Page</NavLink>
         </>
       ) : (
@@ -158,6 +156,7 @@ const HeaderLight = ({
         <>
           <NavLink href="/productos">Productos</NavLink>
           <NavLink href="/usuarios">Usuarios</NavLink>
+          <NavLink href="/blogs">Blogs</NavLink>
           <NavLink href="/reportes">Reportes</NavLink>
           <NavLink href="/">Landing Page</NavLink>
         </>
@@ -168,6 +167,7 @@ const HeaderLight = ({
         <>
           <NavLink href="/productos">Productos</NavLink>
           <NavLink href="/reportes">Reportes</NavLink>
+          <NavLink href="/blogs">Blogs</NavLink>
           <NavLink href="/">Landing Page</NavLink>
         </>
       ) : (
