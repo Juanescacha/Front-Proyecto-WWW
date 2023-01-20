@@ -161,5 +161,5 @@ function Reportes() {
             </AnimationRevealPage>
     );
 }
-export default Reportes
-//export default withAuthenticationRequired(ConsultarReportes, { onRedirecting: () => <Spinner animation="border" />,});
+//export default Reportes
+export default withAuthenticationRequired(ConsultarReportes, { onRedirecting: () => <Spinner animation="border" />,});
