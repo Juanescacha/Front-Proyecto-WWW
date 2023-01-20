@@ -8,43 +8,25 @@ import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
 import { LogoutButton } from "components/LogOutButton"
 import { useNavigate } from "react-router-dom"
 import { Spinner } from 'react-bootstrap'
-//import { Container, FormControl, InputLabel, Input, FormHelperText, Button,Grid, FormGroup, makeStyles } from '@mui/material';
-import { FormGroup, FormControl, InputLabel, Input, Button, makeStyles } from '@material-ui/core'
+import { Container, FormControl, InputLabel, Input, FormHelperText, Button,Grid } from '@mui/material';
 
 const SignUp = () => {
 
-  const { user, isAuthenticated, isLoading, logout } = useAuth0();
+  const { user, isAuthenticated, isLoading } = useAuth0();
 
   const [nombre, setNombre] = useState('');
   const [correo, setCorreo] = useState('');
-  const [value, setValue] = useState("")
   const navigate = useNavigate()
 
-  const useStyle = makeStyles({
-    formStyle: {
-      width: "50%",
-      margine: "auto",
-      padding: 20,
-      //border: "1px solid grey",
-      paddingTop: 20,
-      boxShadow: "0px 0px 10px rgba(0,0,0,0.5)"
-    }, myBtn: {
-      marginTop: 15,
-      width: '15%'
-    }
-  })
-
   const datosU = {
-    "name": value,
+    "name": nombre,
     "email": user.email,
     "password": "vacio",
     "role": "client",
     "is_active": true
-  }  
+  }
 
   const postUser = () => {
-    console.log('Aqui, Nombre: ', value)
-
     const results = fetch('https://api-www-5c6w.onrender.com/api/users/', {
       method: 'POST',
       body: JSON.stringify(datosU),
@@ -91,13 +73,8 @@ const SignUp = () => {
     }
   }
 
-  const handleChange = e => {
-    setValue(e.target.value)
-  }
-
   registroGoogle()
 
-  const classes = useStyle()
   return (
     <div>
         { correoVerificado ?
@@ -107,17 +84,25 @@ const SignUp = () => {
             :
             (
                 <AnimationRevealPage>
-                    <div>
-                      <hi>Completa tu registro</hi>
-                      <FormGroup className={classes.formStyle}>
-                        <FormControl>
-                          <InputLabel>Nombre</InputLabel>
-                          <Input value={value} onChange={handleChange} />
-                        </FormControl>
-                        <Button variant='contained' color="secondary" className={classes.myBtn} onClick={() => postUser()}>Guardar</Button>
-                        <Button variant="contained" color="secondary" className={classes.myBtn} onClick={ () => logout({returnTo: window.location.origin }) }>Cerrar sesión</Button>
-                      </FormGroup>
-                    </div>
+                    <Container>
+                        <div>Escribe tu nombre para completar tu registro</div>
+                        <Grid container>
+                            <Grid item md={12}>  
+                                <FormControl>
+                                    <InputLabel htmlFor="my-input">Nombre</InputLabel>
+                                    <Input id="my-input" aria-describedby="my-helper-text" onChange={(ev) => setNombre(ev.target.value)} />
+                                </FormControl>
+                            </Grid>
+                            <Grid item md={12}>
+                                <Button variant='contained' onClick={() => postUser()}>
+                                    Guardar
+                                </Button>
+                            </Grid>
+                            <Grid item md={12}>
+                                <LogoutButton />
+                            </Grid>
+                        </Grid>
+                    </Container>
                 </AnimationRevealPage>
             )}
     </div>
