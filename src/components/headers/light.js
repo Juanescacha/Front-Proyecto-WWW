@@ -103,8 +103,8 @@ const HeaderLight = ({
             setRol(data.role)
             setUser(data)
             //console.log('Data: ', data)
-            console.log("Role useState: ", rol)
-            console.log("data.role: ", data.role)
+            //console.log("Role useState: ", rol)
+            //console.log("data.role: ", data.role)
 
             if (!data.is_active) {
               if ((data.detail = "Not found.")) {

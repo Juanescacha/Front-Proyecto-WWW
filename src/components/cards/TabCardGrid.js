@@ -210,7 +210,9 @@ const TabCardGrid = ({ heading = "Checkout the Menu" }) => {
                       }}
                       transition={{ duration: 0.3 }}
                     >
-                      <CardButton>Comprar</CardButton>
+                      <a href="https://www.google.com">
+                        <CardButton>Ubicacion</CardButton>
+                      </a>
                     </CardHoverOverlay>
                   </CardImageContainer>
                   <CardText>

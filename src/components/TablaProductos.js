@@ -46,8 +46,8 @@ class TablaProductos extends Component {
     },
   }
 
-  peticionGet = () => {
-    axios
+  peticionGet = async () => {
+    await axios
       .get("https://api-www-5c6w.onrender.com/api/products/")
       .then(response => {
         this.setState({ data: response.data })
@@ -160,6 +160,18 @@ class TablaProductos extends Component {
     this.setState({ modalEditar: !this.state.modalEditar, error: {} })
   }
 
+  scraping = async () => {
+    await axios
+      .post("https://api-www-5c6w.onrender.com/api/products/")
+      .then(response => {
+        console.log(response)
+        this.peticionGet()
+      })
+      .catch(error => {
+        console.log("Error scraping:", error.message)
+      })
+  }
+
   seleccionarProducto = producto => {
     this.setState({
       form: {
@@ -208,6 +220,11 @@ class TablaProductos extends Component {
           onClick={() => this.modalInsertar()}
         >
           Agregar Producto
+        </button>
+        <br />
+        <br />
+        <button className="btn btn-danger" onClick={() => this.scraping()}>
+          Web scraping
         </button>
         <br />
         <br />

@@ -118,8 +118,8 @@ class TablaUsuarios extends Component {
     }
   }
 
-  peticionGet = () => {
-    axios
+  peticionGet = async () => {
+    await axios
       .get("https://api-www-5c6w.onrender.com/api/users/")
       .then(response => {
         this.setState({ data: response.data })
