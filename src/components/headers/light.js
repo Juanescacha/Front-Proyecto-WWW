@@ -132,7 +132,7 @@ const HeaderLight = ({
       ) {
         //console.log('null o undefined O \'Not found\'')
         //console.log('De Auth0: ', user)
-        navigate("/signup")
+        //navigate("/signup")
       }
     }
   }
